@@ -12,6 +12,7 @@ using namespace std;
 #define rep(i, a, b) for(int i = a; i < (b); ++i)
 #define sz(x) (int)(x).size()
 #define vi vector<int>
+#define pb push_back
 void solve(){
 
 }
