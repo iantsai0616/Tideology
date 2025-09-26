@@ -1,4 +1,4 @@
-This is pdfTeX, Version 3.141592653-2.6-1.40.27 (TeX Live 2025) (preloaded format=pdflatex 2025.8.28)  25 SEP 2025 23:37
+This is pdfTeX, Version 3.141592653-2.6-1.40.27 (TeX Live 2025) (preloaded format=pdflatex 2025.8.28)  26 SEP 2025 10:31
 entering extended mode
  \write18 enabled.
  %&-line parsing enabled.
@@ -950,28 +950,25 @@ runsystem(rm -f build/kactl.tmp)...executed.
 
 runsystem(python3 content/tex/preprocessor.py -i "content/graph/MinCostMaxFlow.cpp" -o build/kactl.tmp )...executed.
 
- (./build/kactl.tmp
 
-! Package kactlpkg Error: MinCostMaxFlow.cpp: Missing command: Author. Missing command: Description. .
-
-See the kactlpkg package documentation for explanation.
-Type  H <return>  for immediate help.
- ...                                              
+! I can't find file `build/kactl.tmp'.
+<argument> ... /before}\@@input "build/kactl.tmp" 
                                                   
-l.1 ...nd: Author. Missing command: Description. }
-                                                  
-? 
+l.10 	\kactlimport{MinCostMaxFlow.cpp}
+                                      
+(Press Enter to retry, or Control-D to exit)
+Please type another input file name: 
 ! Emergency stop.
- ...                                              
+<argument> ... /before}\@@input "build/kactl.tmp" 
                                                   
-l.1 ...nd: Author. Missing command: Description. }
-                                                  
+l.10 	\kactlimport{MinCostMaxFlow.cpp}
+                                      
 End of file on the terminal!
 
  
 Here is how much of TeX's memory you used:
- 17208 strings out of 473190
- 261515 string characters out of 5715800
+ 17205 strings out of 473190
+ 261289 string characters out of 5715800
  2208810 words of memory out of 5000000
  38842 multiletter control sequences out of 15000+600000
  574300 words of font info for 94 fonts, out of 8000000 for 9000
