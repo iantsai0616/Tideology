@@ -1,3 +1,11 @@
+/**
+ * Author: chilli
+ * Date: 2019-05-17
+ * Source: Wikipedia
+ * Description: To obtain a maximum independent set of a graph, find a max
+ * clique of the complement. If the graph is bipartite, see MinimumVertexCover.
+ */
+
 template <typename T1, typename T2>
 struct MCMF { // T1 -> flow, T2 -> cost, 0-based
   const T1 INF1 = numeric_limits<T1>::max() / 2;
