@@ -1,10 +1,26 @@
+/**
+ * Author: Mattias de Zalenski
+ * Date: 2002-11-04
+ * Description: Magic formula for the volume of a polyhedron. Faces should point outwards.
+ * Status: tested
+ */
+#pragma once
+int cmp(pii a, pii b, bool same = true){
+#define is_neg(k) (sgn(k.Y) < 0 || (sgn(k.Y) == 0 && sgn(k.X) < 0))
+  int A = is_neg(a), B = is_neg(b);
+  if(A != B)
+    return A < B;
+  if(sgn(cross(a, b)) == 0)
+    return same ? abs2(a) < abs2(b) : -1;
+  return sgn(cross(a, b)) > 0;
+}
 struct Event {
   pii d; int u, v;
   bool operator<(const Event &b) const {
     int ret = cmp(d, b.d, false);
     return ret == -1 ? false : ret; } // no tie-break
 };
-void rotatingSweepLine(const vector<pll> &p) {
+void rotatingSweepLine(const vector<pii> &p) {
   const int n = sz(p);
   vector<Event> e; e.reserve(n * (n - 1));
   for (int i = 0; i < n; i++)
