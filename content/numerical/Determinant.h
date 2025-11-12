@@ -9,7 +9,7 @@
  */
 #pragma once
 
-double det(vector<vector<double>>& a) {
+double det(vector<vector<double>> a) {
 	int n = sz(a); double res = 1;
 	rep(i,0,n) {
 		int b = i;
