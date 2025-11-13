@@ -1,102 +1,104 @@
-/**
- * Author: Simon Lindholm
- * Date: 2016-07-25
- * Source: https://github.com/ngthanhtrung23/ACM_Notebook_new/blob/master/DataStructure/LinkCutTree.h
- * Description: Represents a forest of unrooted trees. You can add and remove
- * edges (as long as the result is still a forest), and check whether
- * two nodes are in the same tree.
- * Time: All operations take amortized O(\log N).
- * Status: Stress-tested a bit for N <= 20
- */
-#pragma once
-
-struct Node { // Splay tree. Root's pp contains tree's parent.
-	Node *p = 0, *pp = 0, *c[2];
-	bool flip = 0;
-	Node() { c[0] = c[1] = 0; fix(); }
-	void fix() {
-		if (c[0]) c[0]->p = this;
-		if (c[1]) c[1]->p = this;
-		// (+ update sum of subtree elements etc. if wanted)
-	}
-	void pushFlip() {
-		if (!flip) return;
-		flip = 0; swap(c[0], c[1]);
-		if (c[0]) c[0]->flip ^= 1;
-		if (c[1]) c[1]->flip ^= 1;
-	}
-	int up() { return p ? p->c[1] == this : -1; }
-	void rot(int i, int b) {
-		int h = i ^ b;
-		Node *x = c[i], *y = b == 2 ? x : x->c[h], *z = b ? y : x;
-		if ((y->p = p)) p->c[up()] = y;
-		c[i] = z->c[i ^ 1];
-		if (b < 2) {
-			x->c[h] = y->c[h ^ 1];
-			y->c[h ^ 1] = x;
-		}
-		z->c[i ^ 1] = this;
-		fix(); x->fix(); y->fix();
-		if (p) p->fix();
-		swap(pp, y->pp);
-	}
-	void splay() { /// Splay this up to the root. Always finishes without flip set.
-		for (pushFlip(); p; ) {
-			if (p->p) p->p->pushFlip();
-			p->pushFlip(); pushFlip();
-			int c1 = up(), c2 = p->up();
-			if (c2 == -1) p->rot(c1, 2);
-			else p->p->rot(c2, c1 != c2);
-		}
-	}
-	Node* first() { /// Return the min element of the subtree rooted at this, splayed to the top.
-		pushFlip();
-		return c[0] ? c[0]->first() : (splay(), this);
-	}
+struct node{
+    node *s[2],*fa;
+    int val,siz,tag;
+    //val是权值，siz是子树权值的异或，tag是懒标记 
 };
-
-struct LinkCut {
-	vector<Node> node;
-	LinkCut(int N) : node(N) {}
-
-	void link(int u, int v) { // add an edge (u, v)
-		assert(!connected(u, v));
-		makeRoot(&node[u]);
-		node[u].pp = &node[v];
+struct LCT{
+	node *null;
+	node *pt[100010];
+	LCT(){
+	    null=new node;
+	    null->val=null->siz=null->tag=0;
+	    null->s[0]=null->s[1]=null->fa=null;
 	}
-	void cut(int u, int v) { // remove an edge (u, v)
-		Node *x = &node[u], *top = &node[v];
-		makeRoot(top); x->splay();
-		assert(top == (x->pp ?: x->c[0]));
-		if (x->pp) x->pp = 0;
-		else {
-			x->c[0] = top->p = 0;
-			x->fix();
+	node *new_node(int x){
+		node *p=new node;
+		p->val=x,p->siz=p->tag=0;
+		p->s[0]=p->s[1]=p->fa=null;
+		return p;
+	}
+	bool qson(node *p){
+		return p->fa->s[1]==p;
+	}
+	bool isroot(node *p){
+		return (p->fa->s[0]!=p && p->fa->s[1]!=p);
+	}
+	void pushup(node *p){//更新这条实链内p的儿子的权值的异或和
+		p->siz=p->val^p->s[0]->siz^p->s[1]->siz;
+	}
+	void pushdown(node *p){//下传区间旋转懒标记
+		if(!p->tag) return;
+		if(p->s[0]!=null) swap(p->s[0]->s[0],p->s[0]->s[1]),p->s[0]->tag^=1;
+		if(p->s[1]!=null) swap(p->s[1]->s[0],p->s[1]->s[1]),p->s[1]->tag^=1;
+		p->tag=0;
+	}
+	void update(node *p){
+		if(!isroot(p)) update(p->fa);
+		pushdown(p);
+	}
+	void rorate(node *p){
+    	node *fa=p->fa;
+    	node *gf=fa->fa;
+    	int k=qson(p);
+    	if(!isroot(fa)) gf->s[qson(fa)]=p;
+    	p->fa=gf;
+    	fa->s[k]=p->s[k^1],p->s[k^1]->fa=fa;
+    	p->s[k^1]=fa,fa->fa=p;
+    	pushup(fa),pushup(p);
+	}
+	void splay(node *p){
+		update(p);
+	    while(!isroot(p)){
+	        node *fa=p->fa;
+	        node *gf=fa->fa;
+	        if(!isroot(fa)){
+	            if(qson(p)==qson(fa)) rorate(fa);
+	            else rorate(p);
+	        }
+	        rorate(p);
+	    }
+	}
+	void access(node *p){//将p到根节点都变为实链 
+		node *q=null;
+		while(p!=null){
+			splay(p);
+			p->s[1]=q;
+			pushup(p);
+			q=p,p=p->fa;
 		}
 	}
-	bool connected(int u, int v) { // are u, v in the same tree?
-		Node* nu = access(&node[u])->first();
-		return nu == access(&node[v])->first();
+	void beroot(node *p){//将p变为根节点 
+		access(p),splay(p);
+		swap(p->s[0],p->s[1]);
+		p->tag^=1;
 	}
-	void makeRoot(Node* u) { /// Move u to root of represented tree.
-		access(u);
-		u->splay();
-		if(u->c[0]) {
-			u->c[0]->p = 0;
-			u->c[0]->flip ^= 1;
-			u->c[0]->pp = u;
-			u->c[0] = 0;
-			u->fix();
-		}
+	node *find(node *p){//寻找实链的顶端 
+		access(p),splay(p);
+		while(p->s[0]!=null) p=p->s[0];
+		splay(p);
+		return p;
 	}
-	Node* access(Node* u) { /// Move u to root aux tree. Return the root of the root aux tree.
-		u->splay();
-		while (Node* pp = u->pp) {
-			pp->splay(); u->pp = 0;
-			if (pp->c[1]) {
-				pp->c[1]->p = 0; pp->c[1]->pp = pp; }
-			pp->c[1] = u; pp->fix(); u = pp;
-		}
-		return u;
+	void belink(node *p,node *q){//使有边的p,q在辅助树上有边
+		beroot(p);
+		access(q);
+		splay(q);
 	}
-};
+	void link(int a,int b){
+		if(find(pt[a])!=find(pt[b]))
+			beroot(pt[a]),pt[a]->fa=pt[b];
+	}
+	void cut(int a,int b){
+		belink(pt[a],pt[b]);
+		if(pt[b]->s[0]==pt[a])
+			pt[b]->s[0]=pt[a]->fa=null;
+	}
+	int ask(int a,int b){
+		belink(pt[a],pt[b]);
+		return pt[b]->siz;
+	}
+	void update(int a,int b){
+		splay(pt[a]);
+		pt[a]->val=b;
+		pushup(pt[a]);
+	}
+}
