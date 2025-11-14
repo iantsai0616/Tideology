@@ -1,7 +1,16 @@
+/**
+ * Author: Simon Lindholm
+ * Date: 2017-04-20
+ * License: CC0
+ * Source: own work
+ * Description: 
+ * Time: O(\log N)
+ * Status: stress-tested
+ */
 struct node{
     node *s[2],*fa;
     int val,siz,tag;
-    //val是权值，siz是子树权值的异或，tag是懒标记 
+	//val is value, siz is xor of children vals, tag is lazy tag
 };
 struct LCT{
 	node *null;
@@ -23,10 +32,10 @@ struct LCT{
 	bool isroot(node *p){
 		return (p->fa->s[0]!=p && p->fa->s[1]!=p);
 	}
-	void pushup(node *p){//更新这条实链内p的儿子的权值的异或和
+	void pushup(node *p){//update this real chain's p's children's values xor
 		p->siz=p->val^p->s[0]->siz^p->s[1]->siz;
 	}
-	void pushdown(node *p){//下传区间旋转懒标记
+	void pushdown(node *p){//push down rotate lazy tag
 		if(!p->tag) return;
 		if(p->s[0]!=null) swap(p->s[0]->s[0],p->s[0]->s[1]),p->s[0]->tag^=1;
 		if(p->s[1]!=null) swap(p->s[1]->s[0],p->s[1]->s[1]),p->s[1]->tag^=1;
@@ -58,7 +67,7 @@ struct LCT{
 	        rorate(p);
 	    }
 	}
-	void access(node *p){//将p到根节点都变为实链 
+	void access(node *p){//turn p->root into real chain
 		node *q=null;
 		while(p!=null){
 			splay(p);
@@ -67,18 +76,18 @@ struct LCT{
 			q=p,p=p->fa;
 		}
 	}
-	void beroot(node *p){//将p变为根节点 
+	void beroot(node *p){//turn p into root
 		access(p),splay(p);
 		swap(p->s[0],p->s[1]);
 		p->tag^=1;
 	}
-	node *find(node *p){//寻找实链的顶端 
+	node *find(node *p){//find top of real chain
 		access(p),splay(p);
 		while(p->s[0]!=null) p=p->s[0];
 		splay(p);
 		return p;
 	}
-	void belink(node *p,node *q){//使有边的p,q在辅助树上有边
+	void belink(node *p,node *q){//let (p,q) with edge also have edge on auxillary tree
 		beroot(p);
 		access(q);
 		splay(q);

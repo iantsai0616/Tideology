@@ -1,3 +1,12 @@
+/**
+ * Author: Simon Lindholm
+ * Date: 2017-04-20
+ * License: CC0
+ * Source: own work
+ * Description: 
+ * Time: O(\log N)
+ * Status: stress-tested
+ */
 // maybe need fac ivf
 // == PART HASH ==
 #define fi(s, n) for (int i = (int)(s); i < (int)(n); i++)
