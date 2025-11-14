@@ -1,30 +1,30 @@
 /**
- * Author: Andrew He, chilli
- * Date: 2019-05-07
+ * Author: Simon Lindholm
+ * Date: 2017-04-20
  * License: CC0
- * Source: folklore
- * Description: Computes the minimum circle that encloses a set of points.
- * Time: expected O(n)
+ * Source: own work
+ * Description: 
+ * Time: O(\log N)
  * Status: stress-tested
  */
-#pragma once
-
-#include "circumcircle.h"
-
-pair<P, double> mec(vector<P> ps) {
-	shuffle(all(ps), mt19937(time(0)));
-	P o = ps[0];
-	double r = 0, EPS = 1 + 1e-8;
-	rep(i,0,sz(ps)) if ((o - ps[i]).dist() > r * EPS) {
-		o = ps[i], r = 0;
-		rep(j,0,i) if ((o - ps[j]).dist() > r * EPS) {
-			o = (ps[i] + ps[j]) / 2;
-			r = (o - ps[i]).dist();
-			rep(k,0,j) if ((o - ps[k]).dist() > r * EPS) {
-				o = ccCenter(ps[i], ps[j], ps[k]);
-				r = (o - ps[i]).dist();
+using ld = long double;
+pair<pdd, ld> circumcenter(pdd a, pdd b, pdd c);
+pair<pdd, ld> MinimumEnclosingCircle(vector<pdd> &pts){
+	random_shuffle(iter(pts));
+	pdd c = pts[0];
+	ld r = 0;
+	for(int i = 1; i < SZ(pts); i++){
+		if(abs(pts[i] - c) <= r) continue;
+		c = pts[i]; r = 0;
+		for(int j = 0; j < i; j++){
+			if(abs(pts[j] - c) <= r) continue;
+			c = (pts[i] + pts[j]) / 2;
+			r = abs(pts[i] - c);
+			for(int k = 0; k < j; k++){
+				if(abs(pts[k] - c) > r)
+					tie(c, r) = circumcenter(pts[i], pts[j], pts[k]);
 			}
 		}
 	}
-	return {o, r};
+	return {c, r};
 }
