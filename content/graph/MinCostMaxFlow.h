@@ -1,58 +1,73 @@
-/**
- * Author: Simon Lindholm
- * Date: 2017-04-20
- * License: CC0
- * Source: own work
- * Description: 
- * Time: O(\log N)
- * Status: stress-tested
- */
-struct MCMF { // 0-base
-  struct Edge {
-    ll from, to, cap, flow, cost, rev; 
-  };
+template <typename T1, typename T2>
+struct MCMF { // T1 -> flow, T2 -> cost, 0-based
+  const T1 INF1 = numeric_limits<T1>::max() / 2;
+  const T2 INF2 = numeric_limits<T2>::max() / 2;
+  struct edge { int v; T1 f; T2 c; };
   int n, s, t;
-  vector<vector<Edge>> g;
-  vector<Edge*> past;
-  vector<ll> dis, up, pot;
-  explicit MCMF(int _n): n(_n), g(n), past(n), dis(n), up(n), pot(n) {}
-  void add_edge(ll a, ll b, ll cap, ll cost) {
-    g[a].pb(Edge{a, b, cap, 0, cost, SZ(g[b])});
-    g[b].pb(Edge{b, a, 0, 0, -cost, SZ(g[a]) - 1});
-  }
-  bool BellmanFord() {
-    vector<bool> inq(n);
-    fill(iter(dis), INF);
-    queue<int> q;
-    auto relax = [&](int u, ll d, ll cap, Edge *e) {
-      if (cap > 0 && dis[u] > d) {
-        dis[u] = d, up[u] = cap, past[u] = e;
-        if (!inq[u]) inq[u] = 1, q.push(u);
-      }
-    };
-    relax(s, 0, INF, 0);
+  vector <vector <int>> g;
+  vector <edge> e;
+  vector <T2> dis, pot;
+  vector <int> rt, vis;
+  // bool DAG()...
+  bool SPFA() {
+    rt.assign(n, -1), dis.assign(n, INF2);
+    vis.assign(n, false);
+    queue <int> q;
+    q.push(s), dis[s] = 0, vis[s] = true;
     while (!q.empty()) {
-      int u = q.front();
-      q.pop(), inq[u] = 0;
-      for (auto &e : g[u]) {
-        ll d2 = dis[u] + e.cost + pot[u] - pot[e.to];
-        relax(e.to, d2, min(up[u], e.cap - e.flow), &e);
+      int v = q.front(); q.pop();
+      vis[v] = false;
+      for (int id : g[v]) {
+        auto [u, f, c] = e[id];
+        T2 ndis = dis[v] + c + pot[v] - pot[u];
+        if (f > 0 && dis[u] > ndis) {
+          dis[u] = ndis, rt[u] = id;
+          if (!vis[u]) vis[u] = true, q.push(u);
+        }
       }
     }
-    return dis[t] != INF;
-  }
-  pair<ll, ll> solve(int _s, int _t, bool neg = true) {
-    s = _s, t = _t; ll flow = 0, cost = 0;
-    if (neg) BellmanFord(), pot = dis;
-    for (; BellmanFord(); pot = dis) {
+    return dis[t] != INF2;
+  } // df1862
+  bool dijkstra() {
+    rt.assign(n, -1), dis.assign(n, INF2);
+    priority_queue <pair <T2, int>, vector <pair <T2, int>>, greater <pair <T2, int>>> pq;
+    dis[s] = 0, pq.emplace(dis[s], s);
+    while (!pq.empty()) {
+      auto [d, v] = pq.top(); pq.pop();
+      if (dis[v] < d) continue;
+      for (int id : g[v]) {
+        auto [u, f, c] = e[id];
+        T2 ndis = dis[v] + c + pot[v] - pot[u];
+        if (f > 0 && dis[u] > ndis) {
+          dis[u] = ndis, rt[u] = id;
+          pq.emplace(ndis, u);
+        }
+      }
+    }
+    return dis[t] != INF2;
+  } // d46baf
+  vector <pair <T1, T2>> solve(int _s, int _t) {
+    s = _s, t = _t, pot.assign(n, 0);
+    vector <pair <T1, T2>> ans; bool fr = true;
+    while ((fr ? SPFA() : SPFA())) {
       for (int i = 0; i < n; ++i)
-        if (dis[i] != INF) dis[i] += pot[i] - pot[s];
-      flow += up[t], cost += up[t] * dis[t];
-      for (int i = t; past[i]; i = past[i]->from) {
-        auto &e = *past[i];
-        e.flow += up[t], g[e.to][e.rev].flow -= up[t];
-      }
+        dis[i] += pot[i] - pot[s];
+      T1 add = INF1;
+      for (int i = t; i != s; i = e[rt[i] ^ 1].v)
+        add = min(add, e[rt[i]].f);
+      for (int i = t; i != s; i = e[rt[i] ^ 1].v)
+        e[rt[i]].f -= add, e[rt[i] ^ 1].f += add;
+      ans.emplace_back(add, dis[t]), fr = false;
+      for (int i = 0; i < n; ++i) swap(dis[i], pot[i]);
     }
-    return {flow, cost};
+    return ans;
   }
-};
+  void add_edge(int u, int v, T1 f, T2 c) {
+    g[u].pb(sz(e)), e.pb({v, f, c});
+    g[v].pb(sz(e)), e.pb({u, 0, -c});
+  }
+  MCMF (int _n) : n(_n), g(n), e() {}
+//void reset() {
+//  for (int i = 0; i < sz(e); ++i) e[i].f = 0;
+//}
+}; // 383274
