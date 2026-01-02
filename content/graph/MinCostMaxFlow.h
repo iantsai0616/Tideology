@@ -1,3 +1,12 @@
+/**
+ * Author: Simon Lindholm
+ * Date: 2017-04-20
+ * License: CC0
+ * Source: own work
+ * Description: 
+ * Time: O(\log N)
+ * Status: stress-tested
+ */
 struct MCMF { // 0-base
   struct Edge {
     ll from, to, cap, flow, cost, rev; 
