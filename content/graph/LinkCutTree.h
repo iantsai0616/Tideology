@@ -81,7 +81,7 @@ struct LCT{
 		swap(p->s[0],p->s[1]);
 		p->tag^=1;
 	}
-	node *find(node *p){//find top of real chain on original tree
+	node *find(node *p){//find p's root on original tree
 		access(p),splay(p);
 		while(p->s[0]!=null) p=p->s[0];
 		splay(p);
