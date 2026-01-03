@@ -1,113 +1,94 @@
-/**
- * Author: Simon Lindholm
- * Date: 2017-04-20
- * License: CC0
- * Source: own work
- * Description: 
- * Time: O(\log N)
- * Status: stress-tested
- */
-struct node{
-    node *s[2],*fa;
-    int val,siz,tag;
-	//val is value, siz is xor of children vals, tag is lazy tag
+// 1-based
+// == PART HASH ==
+template <typename Val, typename SVal> struct LCT {
+  struct node {
+    int pa, ch[2]; bool rev; int size;
+    Val v, sum, rsum; SVal sv, sub, vir;
+    node() : pa{0}, ch{0, 0}, rev{false}, size{1}, v{},
+      sum{}, rsum{}, sv{}, sub{}, vir{} {}
+  };
+#define cur o[u]
+#define lc cur.ch[0]
+#define rc cur.ch[1]
+  vector<node> o;
+  bool is_root(int u) const {
+    return o[cur.pa].ch[0]!=u && o[cur.pa].ch[1]!=u; }
+  bool is_rch(int u) const {
+    return o[cur.pa].ch[1] == u && !is_root(u); }
+  void down(int u) {
+    for (int c : {lc, rc}) if (c) {
+      if (cur.rev) set_rev(c);
+    }
+    cur.rev = false;
+  }
+  void up(int u) {
+    cur.sum = o[lc].sum + cur.v + o[rc].sum;
+    cur.rsum = o[rc].rsum + cur.v + o[lc].rsum;
+    cur.sub = cur.vir + o[lc].sub + o[rc].sub + cur.sv;
+    cur.size = o[lc].size + o[rc].size + 1;
+  }
+  void set_rev(int u) {
+    swap(lc, rc), swap(cur.sum, cur.rsum);
+    cur.rev ^= 1;
+  }
+// == PART HASH ==
+  void rotate(int u) {
+    int f = cur.pa, g = o[f].pa, l = is_rch(u);
+    if (cur.ch[l ^ 1]) o[cur.ch[l ^ 1]].pa = f;
+    if (not is_root(f)) o[g].ch[is_rch(f)] = u;
+    o[f].ch[l] = cur.ch[l ^ 1], cur.ch[l ^ 1] = f;
+    cur.pa = g, o[f].pa = u; up(f);
+  }
+  vector<int> stk;
+  void splay(int u) {
+    stk.clear(); stk.pb(u);
+    while (not is_root(stk.back()))
+      stk.push_back(o[stk.back()].pa);
+    while (not stk.empty())
+      down(stk.back()), stk.pop_back();
+    for (int f = cur.pa; not is_root(u); f = cur.pa) {
+      if (!is_root(f))
+        rotate(is_rch(u) == is_rch(f) ? f : u);
+      rotate(u);
+    }
+    up(u);
+  }
+  void access(int x) {
+    for (int u = x, last = 0; u; u = cur.pa) {
+      splay(u);
+      cur.vir = cur.vir + o[rc].sub - o[last].sub;
+      rc = last; up(last = u);
+    }
+    splay(x);
+  }
+  int find_root(int u) {
+    int la = 0;
+    for (access(u); u; u = lc) down(la = u);
+	splay(la);
+    return la;
+  }
+  void split(int x, int y) { chroot(x); access(y); }
+  void chroot(int u) { access(u); set_rev(u); }
+// == PART HASH ==
+  LCT(int n = 0) : o(n + 1) { o[0].size = 0; }
+  void set_val(int u, const Val &v) {
+    splay(u); cur.v = v; up(u); }
+  void set_sval(int u, const SVal &v) {
+    access(u); cur.sv = v; up(u); }
+  Val query(int x, int y) {
+    split(x, y); return o[y].sum; }
+  SVal subtree(int p, int u) {
+    chroot(p); access(u); return cur.vir + cur.sv; }
+  bool connected(int u, int v) {
+    return find_root(u) == find_root(v); }
+  void link(int x, int y) {
+    chroot(x); access(y);
+    o[y].vir = o[y].vir + o[x].sub; 
+    up(o[x].pa = y);
+  }
+  void cut(int x, int y) {
+    split(x, y); o[y].ch[0] = o[x].pa = 0; up(y); }
+#undef cur
+#undef lc
+#undef rc
 };
-struct LCT{
-	node *null;
-	node *pt[100010];
-	LCT(){
-	    null=new node;
-	    null->val=null->siz=null->tag=0;
-	    null->s[0]=null->s[1]=null->fa=null;
-	}
-	node *new_node(int x){
-		node *p=new node;
-		p->val=x,p->siz=p->tag=0;
-		p->s[0]=p->s[1]=p->fa=null;
-		return p;
-	}
-	bool qson(node *p){
-		return p->fa->s[1]==p;
-	}
-	bool isroot(node *p){
-		return (p->fa->s[0]!=p && p->fa->s[1]!=p);
-	}
-	void pushup(node *p){//update this real chain's p's children's values xor
-		p->siz=p->val^p->s[0]->siz^p->s[1]->siz;
-	}
-	void pushdown(node *p){//push down rotate lazy tag
-		if(!p->tag) return;
-		if(p->s[0]!=null) swap(p->s[0]->s[0],p->s[0]->s[1]),p->s[0]->tag^=1;
-		if(p->s[1]!=null) swap(p->s[1]->s[0],p->s[1]->s[1]),p->s[1]->tag^=1;
-		p->tag=0;
-	}
-	void update(node *p){
-		if(!isroot(p)) update(p->fa);
-		pushdown(p);
-	}
-	void rorate(node *p){
-    	node *fa=p->fa;
-    	node *gf=fa->fa;
-    	int k=qson(p);
-    	if(!isroot(fa)) gf->s[qson(fa)]=p;
-    	p->fa=gf;
-    	fa->s[k]=p->s[k^1],p->s[k^1]->fa=fa;
-    	p->s[k^1]=fa,fa->fa=p;
-    	pushup(fa),pushup(p);
-	}
-	void splay(node *p){
-		update(p);
-	    while(!isroot(p)){
-	        node *fa=p->fa;
-	        node *gf=fa->fa;
-	        if(!isroot(fa)){
-	            if(qson(p)==qson(fa)) rorate(fa);
-	            else rorate(p);
-	        }
-	        rorate(p);
-	    }
-	}
-	void access(node *p){//turn root->p into real chain
-		node *q=null;
-		while(p!=null){
-			splay(p);
-			p->s[1]=q;
-			pushup(p);
-			q=p,p=p->fa;
-		}
-	}
-	void beroot(node *p){//turn p into root on original tree
-		access(p),splay(p);
-		swap(p->s[0],p->s[1]);
-		p->tag^=1;
-	}
-	node *find(node *p){//find p's root on original tree
-		access(p),splay(p);
-		while(p->s[0]!=null) p=p->s[0];
-		splay(p);
-		return p;
-	}
-	void belink(node *p,node *q){//If p and q are connected, make q the root of the splay tree, and make p the original tree's root (the splay tree's leftmost vertex)
-		beroot(p);
-		access(q);
-		splay(q);
-	}
-	void link(int a,int b){
-		if(find(pt[a])!=find(pt[b]))
-			beroot(pt[a]),pt[a]->fa=pt[b];
-	}
-	void cut(int a,int b){
-		belink(pt[a],pt[b]);
-		if(pt[b]->s[0]==pt[a])
-			pt[b]->s[0]=pt[a]->fa=null;
-	}
-	int ask(int a,int b){
-		belink(pt[a],pt[b]);
-		return pt[b]->siz;
-	}
-	void update(int a,int b){
-		splay(pt[a]);
-		pt[a]->val=b;
-		pushup(pt[a]);
-	}
-}
