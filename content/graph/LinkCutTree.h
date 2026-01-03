@@ -67,7 +67,7 @@ struct LCT{
 	        rorate(p);
 	    }
 	}
-	void access(node *p){//turn p->root into real chain
+	void access(node *p){//turn root->p into real chain
 		node *q=null;
 		while(p!=null){
 			splay(p);
@@ -76,18 +76,18 @@ struct LCT{
 			q=p,p=p->fa;
 		}
 	}
-	void beroot(node *p){//turn p into root
+	void beroot(node *p){//turn p into root on original tree
 		access(p),splay(p);
 		swap(p->s[0],p->s[1]);
 		p->tag^=1;
 	}
-	node *find(node *p){//find top of real chain
+	node *find(node *p){//find top of real chain on original tree
 		access(p),splay(p);
 		while(p->s[0]!=null) p=p->s[0];
 		splay(p);
 		return p;
 	}
-	void belink(node *p,node *q){//let (p,q) with edge also have edge on auxillary tree
+	void belink(node *p,node *q){//If p and q are connected, make q the root of the splay tree, and make p the original tree's root (the splay tree's leftmost vertex)
 		beroot(p);
 		access(q);
 		splay(q);
