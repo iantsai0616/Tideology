@@ -1,7 +1,8 @@
+const ll inf = numeric_limits<ll>::max() / 4;
 struct MCMF {
   struct edge {
     int from, to, rev;
-    ll cap, cost, flow, id;
+    ll cap, cost, flow;
   };
 
   int N;
@@ -12,15 +13,15 @@ struct MCMF {
 
   MCMF(int N) : N(N), ed(N), seen(N), dist(N), pi(N), par(N) {}
 
-  void addEdge(int from, int to, ll cap, ll cost, int id) {
+  void addEdge(int from, int to, ll cap, ll cost) {
     if (from == to) return;
-    ed[from].push_back(edge{from, to, sz(ed[to]), cap, cost, 0, id});
+    ed[from].push_back(edge{from, to, sz(ed[to]), cap, cost, 0});
     ed[to].push_back(edge{to, from, sz(ed[from]) - 1, 0, -cost, 0});
   }
 
   void path(int s) {
     fill(all(seen), 0);
-    fill(all(dist), INF);
+    fill(all(dist), inf);
     fill(all(par), nullptr);
 
     dist[s] = 0;
@@ -51,8 +52,8 @@ struct MCMF {
     }
 
     rep(i,0,N) {
-      if (dist[i] != INF) {
-        pi[i] = min(pi[i] + dist[i], INF);
+      if (dist[i] != inf) {
+        pi[i] = min(pi[i] + dist[i], inf);
       }
     }
   }
@@ -61,7 +62,7 @@ struct MCMF {
     ll totflow = 0, totcost = 0;
 
     while (path(s), seen[t]) {
-      ll fl = INF;
+      ll fl = inf;
 
       for (edge* x = par[t]; x; x = par[x->from]) {
         fl = min(fl, x->cap - x->flow);
@@ -86,7 +87,7 @@ struct MCMF {
 
   // 如果一開始可能有負費用邊，先呼叫 setpi(s)
   void setpi(int s) {
-    fill(all(pi), INF);
+    fill(all(pi), inf);
     pi[s] = 0;
 
     int it = N, ch = 1;
@@ -94,7 +95,7 @@ struct MCMF {
 
     while (ch-- && it--) {
       rep(i,0,N) {
-        if (pi[i] == INF) continue;
+        if (pi[i] == inf) continue;
 
         for (edge& e : ed[i]) {
           if (!e.cap) continue;
