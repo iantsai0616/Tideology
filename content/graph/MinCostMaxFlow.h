@@ -98,7 +98,7 @@ struct MCMF {
         if (pi[i] == inf) continue;
 
         for (edge& e : ed[i]) {
-          if (!e.cap) continue;
+          if (e.cap - e.flow <= 0) continue;
 
           if ((v = pi[i] + e.cost) < pi[e.to]) {
             pi[e.to] = v;
