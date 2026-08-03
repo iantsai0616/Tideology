@@ -1,3 +1,18 @@
+/**
+ * Author: Stanford, KACTL
+ * Source: Stanford notebook, https://github.com/kth-competitive-programming/kactl
+ * Description: Successive shortest path min-cost max-flow using potentials and a PBDS heap.
+ *  Call setpi before maxflow if initial residual edges can have negative costs.
+ *  Negative-cost cycles are not supported.
+ * Usage: Prefer when the number of augmentations is small, or each shortest path can push
+ *  a large bottleneck flow. Usually the simplest and fastest default for ordinary MCMF.
+ *  Initial negative edges need setpi; negative cycles need the lower-bound transformation
+ *  described below, or CostScalingMCMF. PBDS requires GNU GCC/libstdc++.
+ * Time: O(F E log V), and O(V E) for setpi
+ * Status: Stress-tested by KACTL
+ */
+#include <bits/extc++.h> /** keep-include */
+
 const ll inf = numeric_limits<ll>::max() / 4;
 struct MCMF {
   struct edge {
@@ -25,14 +40,14 @@ struct MCMF {
     fill(all(par), nullptr);
 
     dist[s] = 0;
-    priority_queue<pair<ll,int>, vector<pair<ll,int>>, greater<pair<ll,int>>> pq;
+    using PQ = __gnu_pbds::priority_queue<pair<ll,int>, greater<pair<ll,int>>>;
+    PQ pq;
+    vector<PQ::point_iterator> its(N);
     pq.push({0, s});
 
     while (!pq.empty()) {
-      auto [d, v] = pq.top();
+      int v = pq.top().S;
       pq.pop();
-
-      if (seen[v]) continue;
       seen[v] = 1;
 
       ll di = dist[v] + pi[v];
@@ -46,7 +61,12 @@ struct MCMF {
         if (val < dist[e.to]) {
           dist[e.to] = val;
           par[e.to] = &e;
-          pq.push({dist[e.to], e.to});
+          if (its[e.to] == pq.end()) {
+            its[e.to] = pq.push({dist[e.to], e.to});
+          }
+          else {
+            pq.modify(its[e.to], {dist[e.to], e.to});
+          }
         }
       }
     }
@@ -85,7 +105,18 @@ struct MCMF {
     return {totflow, totcost / 2};
   }
 
-  // 如果一開始可能有負費用邊，先呼叫 setpi(s)
+  // 負邊：若殘量網路一開始有負 cost，但從 s 可達的部分沒有負環，
+  // 在第一次 maxflow(s,t) 前呼叫 setpi(s) 一次即可；之後 path()
+  // 會自行維護 pi。若換了源點或另外跑過可行流，需從新源點重跑 setpi。
+  //
+  // 負環：SSP 不能直接處理。從 s 可達的負環會讓 setpi assert；
+  // 不可達的負環也不會被主動消掉。一般情況請改用 CostScalingMCMF。
+  // 若一定要用 SSP，可把每條負邊 u->v(cap,c) 預先流滿：
+  //   1. 答案先加 cap*c，殘量圖加入 v->u(cap,-c)。
+  //   2. 把預流造成的點流量差當成上下界 balance，先求可行流。
+  //   3. 純 min-cost circulation：balance 全部滿流即完成，不用第二趟。
+  //   4. min-cost max-flow：求可行流前另加 t->s(INF,0)，之後移除
+  //      附加源匯及 t->s，再從 s 到 t 跑第二次；之前重新 setpi(s)。
   void setpi(int s) {
     fill(all(pi), inf);
     pi[s] = 0;
