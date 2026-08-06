@@ -7,12 +7,31 @@ using namespace std;
 #define F first
 #define S second
 #define pii pair<int,int>
-#define chmax(x,y) x=x>y?x:y;
-#define chmin(x,y) x=x<y?x:y;
 #define rep(i, a, b) for(int i = a; i < (b); ++i)
 #define sz(x) (int)(x).size()
 #define vi vector<int>
 #define pb push_back
+#ifdef tsao
+template <typename T>
+ostream& operator << (ostream &o, vector <T> vec) {
+    o << "{"; int f = 0;
+    for (T i : vec) o << (f++ ? " " : "") << i;
+    return o << "}";
+}
+void bug__(int c, auto ...a) {
+    cerr << "\e[1;" << c << "m";
+    (..., (cerr << a << " "));
+    cerr << "\e[0m" << endl;
+}
+#define bug_(c, x...) bug__(c, __LINE__, "[" + string(#x) + "]", x)
+#define bug(x...) bug_(32, x)
+#define bugv(x...) bug_(36, vector(x))
+#define safe bug_(33, "safe")
+#else
+#define bug(x...) void(0)
+#define bugv(x...) void(0)
+#define safe void(0)
+#endif
 void solve(){
 
 }
