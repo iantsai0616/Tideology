@@ -1,0 +1,4 @@
+code run
+chmod +x run
+code tem.cpp
+./run tem

@@ -1,0 +1,1 @@
+/opt/homebrew/bin/g++-16 -Diantsai -Wall -Wextra -Wshadow -std=gnu++20 -O2 -pipe $1.cpp -o $1 && ./$1
