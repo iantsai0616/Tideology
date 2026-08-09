@@ -25,7 +25,7 @@ typedef vector<ll> vl;
 void ntt(vl &a) {
 	int n = sz(a), L = 31 - __builtin_clz(n);
 	static vl rt(2, 1);
-	for (static int k = 2, s = 2; k < n; k *= 2, s++) {
+	for (static   int k = 2, s = 2; k < n; k *= 2, s++) {
 		rt.resize(n);
 		ll z[] = {1, modpow(root, mod >> s)};
 		rep(i,k,2*k) rt[i] = rt[i / 2] * z[i & 1] % mod;
