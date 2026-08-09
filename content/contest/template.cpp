@@ -6,7 +6,7 @@ using namespace std;
 #define pb push_back
 #define F first
 #define S second
-#define pii pair<int,int>
+#define pii pair<int,int3 >
 #define rep(i, a, b) for(int i = a; i < (b); ++i)
 #define sz(x) (int)(x).size()
 #define vi vector<int>
@@ -33,7 +33,7 @@ void bug__(int c, auto ...a) {
 #define safe void(0)
 #endif
 void solve(){
-
+	
 }
 signed main() {
 	ios::sync_with_stdio(0);
