@@ -1,14 +1,11 @@
 /**
- * Author: Simon Lindholm
- * Date: 2015-03-19
- * License: CC0
- * Source: me
- * Description:
+ * Description: Calls f(i) for i in [l, r), four iterations at a time.
+ * Status: tested
  */
 #pragma once
 
-#define F {...; ++i;}
-int i = from;
-while (i&3 && i < to) F // for alignment, if needed
-while (i + 4 <= to) { F F F F }
-while (i < to) F
+template<class F> void unroll4(int l, int r, F f){
+  while((l&3) and l<r) f(l++);
+  for(;l+4<=r;l+=4) f(l), f(l+1), f(l+2), f(l+3);
+  while(l<r) f(l++);
+}

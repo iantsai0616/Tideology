@@ -1,56 +1,27 @@
 #include "../utilities/template.h"
-
-typedef vector<ll> vl;
-namespace ignore {
-#include "../../content/number-theory/ModPow.h"
-}
-ll modpow(ll a, ll e);
 #include "../../content/numerical/NumberTheoreticTransform.h"
-ll modpow(ll a, ll e) {
-	if (e == 0)
-		return 1;
-	ll x = modpow(a * a % mod, e >> 1);
-	return e & 1 ? x * a % mod : x;
-}
 
-vl simpleConv(vl a, vl b) {
-	int s = sz(a) + sz(b) - 1;
-	if (a.empty() || b.empty()) return {};
-	vl c(s);
-	rep(i,0,sz(a)) rep(j,0,sz(b))
-		c[i+j] = (c[i+j] + (ll)a[i] * b[j]) % mod;
-	for(auto &x: c) if (x < 0) x += mod;
-	return c;
+vl naive(const vl &a, const vl &b){
+  if(a.empty() or b.empty()) return {};
+  vl c(sz(a)+sz(b)-1);
+  rep(i, 0, sz(a)) rep(j, 0, sz(b))
+    c[i+j]=(c[i+j]+a[i]*b[j])%ntt_mod;
+  return c;
 }
-
-int ra() {
-	static unsigned X;
-	X *= 123671231;
-	X += 1238713;
-	X ^= 1237618;
-	return (X >> 1);
-}
-
-int main() {
-	ll res = 0, res2 = 0;
-	int ind = 0, ind2 = 0;
-	vl a, b;
-	rep(it,0,6000) {
-		a.resize(ra() % 10);
-		b.resize(ra() % 10);
-		for(auto &x: a) x = (ra() % 100 - 50+mod)%mod;
-		for(auto &x: b) x = (ra() % 100 - 50+mod)%mod;
-		for(auto &x: simpleConv(a, b)) res += (ll)x * ind++ % mod;
-		for(auto &x: conv(a, b)) res2 += (ll)x * ind2++ % mod;
-		a.resize(16);
-			vl a2 = a;
-			ntt(a2);
-			rep(k, 0, sz(a2)) {
-				ll sum = 0;
-				rep(x, 0, sz(a2)) { sum = (sum + a[x] * modpow(root, k * x * (mod - 1) / sz(a))) % mod; }
-				assert(sum == a2[k]);
-			}
-	}
-	assert(res==res2);
-	cout<<"Tests passed!"<<endl;
+int main(){
+  mt19937 rng(1);
+  rep(it, 0, 5000){
+    vl a(rng()%60), b(rng()%60);
+    for(ll &x:a) x=rng()%ntt_mod;
+    for(ll &x:b) x=rng()%ntt_mod;
+    assert(conv(a, b)==naive(a, b));
+  }
+  vl a(16); for(ll &x:a) x=rng()%ntt_mod;
+  vl b=a; ntt(b);
+  rep(k, 0, 16){
+    ll s=0;
+    rep(i, 0, 16) s=(s+a[i]*nttPow(ntt_root, k*i*(ntt_mod-1)/16))%ntt_mod;
+    assert(s==b[k]);
+  }
+  cout<<"Tests passed!\n";
 }

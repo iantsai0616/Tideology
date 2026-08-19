@@ -1,26 +1,14 @@
 #include "../utilities/template.h"
+#include "../../content/number-theory/ModInverse.h"
 
-ll modpow(ll a, ll e, ll mod) {
-	if (e == 0) return 1;
-	ll x = modpow(a * a % mod, e >> 1, mod);
-	return e & 1 ? x * a % mod : x;
+ll pw(ll a, ll e, ll m){
+  ll r=1; for(;e;e>>=1, a=a*a%m) if(e&1) r=r*a%m;
+  return r;
 }
-bool isPrime(int x) {
-	if (x <= 1) return false;
-	for (int i = 2; i*i <= x; ++i) {
-		if (x % i == 0) return false;
-	}
-	return true;
+int main(){
+  for(int p:{2, 3, 5, 101, 1009}){
+    auto iv=inverses(p, p);
+    rep(i, 1, p) assert(iv[i]==pw(i, p-2, p));
+  }
+  cout<<"Tests passed!\n";
 }
-int main() {
-	rep(it,1,1000) {
-		int mod = it, LIM=1000;
-		if (!isPrime(mod)) continue;
-		#include "../../content/number-theory/ModInverse.h"
-		for (int i=1; i<it; i++){
-			assert(inv[i] == modpow(i, mod-2, mod));
-		}
-	}
-	cout<<"Tests pass!"<<endl;
-}
-

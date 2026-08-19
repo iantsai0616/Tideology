@@ -1,62 +1,61 @@
 /**
  * Author: Simon Lindholm
- * Date: 2019-12-28
- * License: CC0
- * Source: https://github.com/hoke-t/tamu-kactl/blob/master/content/data-structures/MoQueries.h
- * Description: Answer interval or tree path queries by finding an approximate TSP through the queries,
- * and moving from one query to the next by adding/removing points at the ends.
- * If values are on tree edges, change \texttt{step} to add/remove the edge $(a, c)$ and remove the initial \texttt{add} call (but keep \texttt{in}).
- * Time: O(N \sqrt Q)
+ * Description: Mo ordering for half-open intervals. add/del get (index, end).
+ * Time: O(N sqrt(Q)) moves
  * Status: stress-tested
  */
 #pragma once
 
-void add(int ind, int end) { ... } // add a[ind] (end = 0 or 1)
-void del(int ind, int end) { ... } // remove a[ind]
-int calc() { ... } // compute current answer
-
-vi mo(vector<pii> Q) {
-	int L = 0, R = 0, blk = 350; // ~N/sqrt(Q)
-	vi s(sz(Q)), res = s;
-#define K(x) pii(x.first/blk, x.second ^ -(x.first/blk & 1))
-	iota(all(s), 0);
-	sort(all(s), [&](int s, int t){ return K(Q[s]) < K(Q[t]); });
-	for (int qi : s) {
-		pii q = Q[qi];
-		while (L > q.first) add(--L, 0);
-		while (R < q.second) add(R++, 1);
-		while (L < q.first) del(L++, 0);
-		while (R > q.second) del(--R, 1);
-		res[qi] = calc();
-	}
-	return res;
+template<class Add, class Del, class Calc>
+auto mo(vector<pii> Q, Add add, Del del, Calc calc, int blk=350){
+  using T=decltype(calc());
+  int L=0, R=0; vi ord(sz(Q)); vector<T> ans(sz(Q));
+  iota(all(ord), 0);
+  sort(all(ord), [&](int i, int j){
+    auto [a, b]=Q[i]; auto [c, d]=Q[j];
+    return pii(a/blk, b^-(a/blk&1)) < pii(c/blk, d^-(c/blk&1));
+  });
+  for(int i:ord){
+    auto [l, r]=Q[i];
+    while(L>l) add(--L, 0);
+    while(R<r) add(R++, 1);
+    while(L<l) del(L++, 0);
+    while(R>r) del(--R, 1);
+    ans[i]=calc();
+  }
+  return ans;
 }
 
-vi moTree(vector<array<int, 2>> Q, vector<vi>& ed, int root=0){
-	int N = sz(ed), pos[2] = {}, blk = 350; // ~N/sqrt(Q)
-	vi s(sz(Q)), res = s, I(N), L(N), R(N), in(N), par(N);
-	add(0, 0), in[0] = 1;
-	auto dfs = [&](int x, int p, int dep, auto& f) -> void {
-		par[x] = p;
-		L[x] = N;
-		if (dep) I[x] = N++;
-		for (int y : ed[x]) if (y != p) f(y, x, !dep, f);
-		if (!dep) I[x] = N++;
-		R[x] = N;
-	};
-	dfs(root, -1, 0, dfs);
-#define K(x) pii(I[x[0]] / blk, I[x[1]] ^ -(I[x[0]] / blk & 1))
-	iota(all(s), 0);
-	sort(all(s), [&](int s, int t){ return K(Q[s]) < K(Q[t]); });
-	for (int qi : s) rep(end,0,2) {
-		int &a = pos[end], b = Q[qi][end], i = 0;
-#define step(c) { if (in[c]) { del(a, end); in[a] = 0; } \
-                  else { add(c, end); in[c] = 1; } a = c; }
-		while (!(L[b] <= L[a] && R[a] <= R[b]))
-			I[i++] = b, b = par[b];
-		while (a != b) step(par[a]);
-		while (i--) step(I[i]);
-		if (end) res[qi] = calc();
-	}
-	return res;
+template<class Add, class Del, class Calc>
+auto moTree(vector<array<int, 2>> Q, vector<vi> &g, Add add, Del del,
+            Calc calc, int root=0, int blk=350){
+  using T=decltype(calc());
+  int n=sz(g), ti=n, pos[2]={root, root};
+  vi ord(sz(Q)), I(n*2), L(n), R(n), in(n), par(n), tmp(n);
+  vector<T> ans(sz(Q)); add(root, 0), in[root]=1;
+  auto dfs=[&](auto self, int u, int p, int d)->void {
+    par[u]=p; L[u]=ti;
+    if(d) I[u]=ti++;
+    for(int v:g[u]) if(v!=p) self(self, v, u, !d);
+    if(!d) I[u]=ti++;
+    R[u]=ti;
+  };
+  dfs(dfs, root, -1, 0); iota(all(ord), 0);
+  sort(all(ord), [&](int i, int j){
+    auto a=Q[i], b=Q[j];
+    return pii(I[a[0]]/blk, I[a[1]]^-(I[a[0]]/blk&1)) <
+           pii(I[b[0]]/blk, I[b[1]]^-(I[b[0]]/blk&1));
+  });
+  for(int qi:ord) rep(e, 0, 2){
+    int &a=pos[e], b=Q[qi][e], k=0;
+    auto step=[&](int c){
+      if(in[c]) del(a, e), in[a]=0; else add(c, e), in[c]=1;
+      a=c;
+    };
+    while(not(L[b]<=L[a] and R[a]<=R[b])) tmp[k++]=b, b=par[b];
+    while(a!=b) step(par[a]);
+    while(k) step(tmp[--k]);
+    if(e) ans[qi]=calc();
+  }
+  return ans;
 }

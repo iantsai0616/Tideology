@@ -1,31 +1,40 @@
 /**
- * Author: Simon Lindholm
- * Date: 2019-12-31
- * License: CC0
- * Source: folklore
- * Description: Eulerian undirected/directed path/cycle algorithm.
- * Input should be a vector of (dest, global edge index), where
- * for undirected graphs, forward/backward edges have the same index.
- * Returns a list of nodes in the Eulerian path/cycle with src at both start and end, or
- * empty list if no cycle/path exists.
- * To get edge indices back, add .second to s and ret.
- * Time: O(V + E)
+ * Description: Directed or undirected Euler trail/cycle.
+ * Time: O(V+E)
  * Status: stress-tested
  */
 #pragma once
 
-vi eulerWalk(vector<vector<pii>>& gr, int nedges, int src=0) {
-	int n = sz(gr);
-	vi D(n), its(n), eu(nedges), ret, s = {src};
-	D[src]++; // to allow Euler paths, not just cycles
-	while (!s.empty()) {
-		int x = s.back(), y, e, &it = its[x], end = sz(gr[x]);
-		if (it == end){ ret.push_back(x); s.pop_back(); continue; }
-		tie(y, e) = gr[x][it++];
-		if (!eu[e]) {
-			D[x]--, D[y]++;
-			eu[e] = 1; s.push_back(y);
-		}}
-	for (int x : D) if (x < 0 || sz(ret) != nedges+1) return {};
-	return {ret.rbegin(), ret.rend()};
-}
+struct EulerWalk{
+  int n, m = 0;
+  bool undir;
+  vector<vector<pii>>g;
+  EulerWalk(int N, bool undir_ = false): n(N), undir(undir_), g(N){}
+  void addEdge(int u, int v){
+    g[u].pb({v, m});
+    if(undir) g[v].pb({u, m});
+    m++;
+  }
+  vi calc(int src = 0){
+    vi deg(n), it(n), used(m), ans, st = {src};
+    deg[src]++;
+    while(sz(st)){
+      int u = st.back(), &i = it[u];
+      if(i == sz(g[u])){
+        ans.pb(u);
+        st.pop_back();
+        continue;
+      }
+      auto [v, id] = g[u][i++];
+      if(!used[id]){
+        deg[u]--;
+        deg[v]++;
+        used[id] = 1;
+        st.pb(v);
+      }
+    }
+    for(int x : deg) if(x < 0 or sz(ans) != m + 1) return {};
+    reverse(all(ans));
+    return ans;
+  }
+};

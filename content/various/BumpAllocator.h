@@ -10,10 +10,14 @@
 #pragma once
 
 // Either globally or in a single class:
-static char buf[450 << 20];
-void* operator new(size_t s) {
-	static size_t i = sizeof buf;
-	assert(s < i);
-	return (void*)&buf[i -= s];
+alignas(max_align_t) static char buf[450 << 20];
+static size_t bumpPos = sizeof buf;
+void* operator new(size_t s){
+  assert(s <= bumpPos);
+  bumpPos = (bumpPos-s) & ~(alignof(max_align_t)-1);
+  return (void*)&buf[bumpPos];
 }
-void operator delete(void*) {}
+void operator delete(void*) noexcept {}
+void operator delete(void*, size_t) noexcept {}
+size_t bumpMark(){ return bumpPos; }
+void bumpReset(size_t p){ assert(bumpPos <= p && p <= sizeof buf); bumpPos = p; }

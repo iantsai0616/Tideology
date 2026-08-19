@@ -1,3 +1,11 @@
+/**
+ * Description: 1-based link-cut tree with path and rooted-subtree aggregates.
+ *  Val and SVal need + and -; Val also needs reverse-order aggregation.
+ * Time: O(log N) amortized
+ * Status: stress-tested
+ */
+#pragma once
+
 // 1-based
 // == PART HASH ==
 template <typename Val, typename SVal> struct LCT {
@@ -15,79 +23,80 @@ template <typename Val, typename SVal> struct LCT {
     return o[cur.pa].ch[0]!=u && o[cur.pa].ch[1]!=u; }
   bool is_rch(int u) const {
     return o[cur.pa].ch[1] == u && !is_root(u); }
-  void down(int u) {
-    for (int c : {lc, rc}) if (c) {
-      if (cur.rev) set_rev(c);
+  void down(int u){
+    for(int c : {lc, rc}) if(c){
+      if(cur.rev) set_rev(c);
     }
     cur.rev = false;
   }
-  void up(int u) {
+  void up(int u){
     cur.sum = o[lc].sum + cur.v + o[rc].sum;
     cur.rsum = o[rc].rsum + cur.v + o[lc].rsum;
     cur.sub = cur.vir + o[lc].sub + o[rc].sub + cur.sv;
     cur.size = o[lc].size + o[rc].size + 1;
   }
-  void set_rev(int u) {
+  void set_rev(int u){
     swap(lc, rc), swap(cur.sum, cur.rsum);
     cur.rev ^= 1;
   }
 // == PART HASH ==
-  void rotate(int u) {
+  void rotate(int u){
     int f = cur.pa, g = o[f].pa, l = is_rch(u);
-    if (cur.ch[l ^ 1]) o[cur.ch[l ^ 1]].pa = f;
-    if (not is_root(f)) o[g].ch[is_rch(f)] = u;
+    if(cur.ch[l ^ 1]) o[cur.ch[l ^ 1]].pa = f;
+    if(not is_root(f)) o[g].ch[is_rch(f)] = u;
     o[f].ch[l] = cur.ch[l ^ 1], cur.ch[l ^ 1] = f;
     cur.pa = g, o[f].pa = u; up(f);
   }
   vector<int> stk;
-  void splay(int u) {
+  void splay(int u){
     stk.clear(); stk.pb(u);
-    while (not is_root(stk.back()))
+    while(not is_root(stk.back()))
       stk.push_back(o[stk.back()].pa);
-    while (not stk.empty())
+    while(not stk.empty())
       down(stk.back()), stk.pop_back();
-    for (int f = cur.pa; not is_root(u); f = cur.pa) {
-      if (!is_root(f))
+    for(int f = cur.pa; not is_root(u); f = cur.pa){
+      if(!is_root(f))
         rotate(is_rch(u) == is_rch(f) ? f : u);
       rotate(u);
     }
     up(u);
   }
-  void access(int x) {
-    for (int u = x, last = 0; u; u = cur.pa) {
+  void access(int x){
+    for(int u = x, last = 0; u; u = cur.pa){
       splay(u);
       cur.vir = cur.vir + o[rc].sub - o[last].sub;
       rc = last; up(last = u);
     }
     splay(x);
   }
-  int find_root(int u) {
+  int find_root(int u){
     int la = 0;
-    for (access(u); u; u = lc) down(la = u);
-	splay(la);
+    for(access(u); u; u = lc) down(la = u);
+    splay(la);
     return la;
   }
-  void split(int x, int y) { chroot(x); access(y); }
-  void chroot(int u) { access(u); set_rev(u); }
+  void split(int x, int y){ chroot(x); access(y); }
+  void chroot(int u){ access(u); set_rev(u); }
 // == PART HASH ==
-  LCT(int n = 0) : o(n + 1) { o[0].size = 0; }
-  void set_val(int u, const Val &v) {
-    splay(u); cur.v = v; up(u); }
-  void set_sval(int u, const SVal &v) {
+  LCT(int n = 0) : o(n + 1){ o[0].size = 0; }
+  void set_val(int u, const Val &v){
+    access(u); cur.v = v; up(u); }
+  void set_sval(int u, const SVal &v){
     access(u); cur.sv = v; up(u); }
-  Val query(int x, int y) {
+  Val query(int x, int y){
     split(x, y); return o[y].sum; }
-  SVal subtree(int p, int u) {
+  SVal subtree(int p, int u){
     chroot(p); access(u); return cur.vir + cur.sv; }
-  bool connected(int u, int v) {
+  bool connected(int u, int v){
     return find_root(u) == find_root(v); }
-  void link(int x, int y) {
-    chroot(x); access(y);
-    o[y].vir = o[y].vir + o[x].sub; 
+  void link(int x, int y){
+    chroot(x); assert(find_root(y) != x); access(y);
+    o[y].vir = o[y].vir + o[x].sub;
     up(o[x].pa = y);
   }
-  void cut(int x, int y) {
-    split(x, y); o[y].ch[0] = o[x].pa = 0; up(y); }
+  void cut(int x, int y){
+    split(x, y); assert(o[y].ch[0] == x && !o[x].ch[1]);
+    o[y].ch[0] = o[x].pa = 0; up(y); }
 #undef cur
 #undef lc
 #undef rc
