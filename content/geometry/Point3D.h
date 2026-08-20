@@ -41,3 +41,10 @@ template<class T> struct Point3D {
     return u*dot(u)*(1-c) + (*this)*c - cross(u)*s;
   }
 };
+
+pair<double, double> planeProj(Point3D<double> a, Point3D<double> b,
+    Point3D<double> c, Point3D<double> p){
+  auto x = (b - a).unit(), y = c - a;
+  y = (y - x * y.dot(x)).unit(); p = p - a;
+  return {p.dot(x), p.dot(y)};
+}

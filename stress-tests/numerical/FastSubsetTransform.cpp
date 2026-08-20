@@ -18,5 +18,14 @@ int main(){
     // rep(i, 0, 1 << k) cout << target[i] << ' '; cout << endl;
     assert(c == target);
   }
+  const int mod = 998244353;
+  rep(k, 0, 9){
+    vi a(1 << k), b = a, target = a;
+    for(int &x : a) x = rand() % mod;
+    for(int &x : b) x = rand() % mod;
+    rep(i, 0, 1 << k) rep(j, 0, 1 << k)
+      target[i & j] = (int)((target[i & j] + (ll)a[i]*b[j]) % mod);
+    assert(conv(a, b, mod) == target);
+  }
   cout<<"Tests passed!"<<endl;
 }
