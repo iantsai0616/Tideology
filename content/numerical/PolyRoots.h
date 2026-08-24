@@ -1,35 +1,37 @@
 /**
  * Author: Per Austrin
- * Date: 2004-02-08
- * License: CC0
- * Description: Finds the real roots to a polynomial.
- * Usage: polyRoots({{2, -3, 1}}, -1e9, 1e9) // solve x^2-3x+2 = 0
- * Time: O(n^2 \log(1/\epsilon))
+ * Description: Finds the distinct real roots of a polynomial in [xmin, xmax].
+ * Time: O(n^2 log(1/epsilon))
  */
 #pragma once
 
 #include "Polynomial.h"
 
 vector<double> polyRoots(Poly p, double xmin, double xmax){
-  if(sz(p.a) == 2){ return {-p.a[0]/p.a[1]}; }
+  while(sz(p.a) > 1 && abs(p.a.back()) < 1e-14) p.a.pop_back();
+  if(sz(p.a) <= 1) return {};
+  if(sz(p.a) == 2){
+    double x = -p.a[0]/p.a[1];
+    return xmin <= x && x <= xmax ? vector<double>{x} : vector<double>{};
+  }
+  Poly der = p; der.diff();
+  auto at = polyRoots(der, xmin, xmax);
+  at.insert(at.begin(), xmin); at.pb(xmax);
   vector<double> ret;
-  Poly der = p;
-  der.diff();
-  auto dr = polyRoots(der, xmin, xmax);
-  dr.push_back(xmin-1);
-  dr.push_back(xmax+1);
-  sort(all(dr));
-  rep(i, 0, sz(dr)-1){
-    double l = dr[i], h = dr[i+1];
-    bool sign = p(l) > 0;
-    if(sign ^ (p(h) > 0)){
-      rep(it, 0, 60){ // while(h - l > 1e-8)
-        double m = (l + h) / 2, f = p(m);
-        if((f <= 0) ^ sign) l = m;
-        else h = m;
-      }
-      ret.push_back((l + h) / 2);
+  auto add = [&](double x){
+    if(abs(p(x)) < 1e-8 && (ret.empty() || abs(ret.back()-x) > 1e-7)) ret.pb(x);
+  };
+  rep(i, 0, sz(at)){
+    add(at[i]);
+    if(i+1 == sz(at)) break;
+    double l = at[i], r = at[i+1], fl = p(l), fr = p(r);
+    if((fl > 0) == (fr > 0) || abs(fl) < 1e-8 || abs(fr) < 1e-8) continue;
+    rep(it, 0, 80){
+      double m = (l+r)/2, fm = p(m);
+      if((fl > 0) == (fm > 0)) l = m, fl = fm;
+      else r = m;
     }
+    add((l+r)/2);
   }
   return ret;
 }

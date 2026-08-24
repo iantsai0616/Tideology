@@ -33,5 +33,19 @@ int main(){
     auto v2 = convMod<mod>(a, b);
     assert(v1 == v2);
   }
+  int n = 1 << 18;
+  a.assign(n, mod-1); b.assign(n, mod-1);
+  auto c = convMod<mod>(a, b);
+  rep(i, 0, sz(c)) assert(c[i] == min(i+1, 2*n-1-i));
+  n = 1 << 19; a.resize(n); b.resize(n);
+  for(ll &x : a) x = ra()%mod;
+  for(ll &x : b) x = ra()%mod;
+  c = convMod<mod>(a, b);
+  rep(s, 0, 200){
+    int k = (ll)s*(sz(c)-1)/199; ll ans = 0;
+    for(int i = max(0, k-n+1); i <= min(n-1, k); i++)
+      ans = (ans+a[i]*b[k-i])%mod;
+    assert(c[k] == ans);
+  }
   cout<<"Tests passed!"<<endl;
 }

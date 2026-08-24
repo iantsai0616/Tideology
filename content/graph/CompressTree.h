@@ -16,6 +16,7 @@
 
 typedef vector<pair<int, int>> vpi;
 vpi compressTree(LCA& lca, const vi& subset){
+  if(subset.empty()) return {};
   static vi rev; rev.resize(sz(lca.time));
   vi li = subset, &T = lca.time;
   auto cmp = [&](int a, int b){ return T[a] < T[b]; };

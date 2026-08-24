@@ -11,9 +11,12 @@
  */
 #pragma once
 
-#include "../number-theory/ModPow.h"
-
-int matInv(vector<vector<ll>>& A){
+ll matPow(ll a, ll n, ll mod){
+  ll r = 1;
+  for(; n; n >>= 1, a = a*a%mod) if(n&1) r = r*a%mod;
+  return r;
+}
+int matInv(vector<vector<ll>>& A, ll mod){
   int n = sz(A); vi col(n);
   vector<vector<ll>> tmp(n, vector<ll>(n));
   rep(i, 0, n) tmp[i][i] = 1, col[i] = i;
@@ -26,10 +29,11 @@ int matInv(vector<vector<ll>>& A){
     return i;
 found:
     A[i].swap(A[r]); tmp[i].swap(tmp[r]);
-    rep(j, 0, n)
-      swap(A[j][i], A[j][c]), swap(tmp[j][i], tmp[j][c]);
+    rep(j, 0, n){
+      swap(A[j][i], A[j][c]); swap(tmp[j][i], tmp[j][c]);
+    }
     swap(col[i], col[c]);
-    ll v = modpow(A[i][i], mod - 2);
+    ll v = matPow(A[i][i], mod-2, mod);
     rep(j, i+1, n){
       ll f = A[j][i] * v % mod;
       A[j][i] = 0;
@@ -46,7 +50,8 @@ found:
     rep(k, 0, n) tmp[j][k] = (tmp[j][k] - v*tmp[i][k]) % mod;
   }
 
-  rep(i, 0, n) rep(j, 0, n)
-    A[col[i]][col[j]] = tmp[i][j] % mod + (tmp[i][j] < 0)*mod;
+  rep(i, 0, n) rep(j, 0, n){
+    A[col[i]][col[j]] = tmp[i][j]%mod+(tmp[i][j] < 0)*mod;
+  }
   return n;
 }
