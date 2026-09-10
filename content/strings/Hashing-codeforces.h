@@ -1,6 +1,6 @@
 /**
  * Author: Simon Lindholm
- * Description: Hack-resistant string hash modulo two primes and 2^32.
+ * Description: Hack-resistant string hash modulo two primes and $2^{32}$.
  * Status: stress-tested
  */
 #pragma once

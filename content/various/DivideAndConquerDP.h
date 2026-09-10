@@ -1,5 +1,5 @@
 /**
- * Description: dp[i]=min_{k<=i} cost(i, k), assuming opt[i] is monotone.
+ * Description: $dp[i]=\min_{k\le i} cost(i, k)$, assuming opt[i] is monotone.
  * Time: O((N+K) log N) cost calls
  * Status: stress-tested
  */

@@ -49,7 +49,7 @@ def ordoescape(input, esc=True):
 def addref(caption, outstream):
     caption = pathescape(caption).strip()
     print(r"\kactlref{%s}" % caption, file=outstream)
-    with open('header.tmp', 'a') as f:
+    with open('build/header.tmp', 'a') as f:
         f.write(caption + "\n")
 
 COMMENT_TYPES = [
@@ -68,8 +68,8 @@ def find_start_comment(source, start=None):
     return first
 
 def processwithcomments(caption, instream, outstream, listingslang):
-    knowncommands = ['Author', 'Date', 'Description', 'Source', 'Time', 'Memory', 'License', 'Status', 'Usage', 'Details']
-    requiredcommands = ['Author', 'Description']
+    knowncommands = ['Author', 'Date', 'Description', 'Source', 'Time', 'Memory', 'License', 'Status', 'Usage', 'Details', 'Requires', 'Duality', 'Oracle']
+    requiredcommands = ['Description']
     includelist = []
     error = ""
     warning = ""
@@ -161,8 +161,13 @@ def processwithcomments(caption, instream, outstream, listingslang):
         out.append(r"\kactlerror{%s: %s}" % (caption, error))
     else:
         addref(caption, outstream)
-        if commands.get("Description"):
-            out.append(r"\defdescription{%s}" % escape(commands["Description"]))
+        description = escape(commands.get("Description", ""))
+        for key in ['Requires', 'Duality', 'Oracle']:
+            if commands.get(key):
+                value = escape(commands[key]) if key == 'Duality' else codeescape(commands[key])
+                description += r"\par\textbf{%s:} %s" % (key, value)
+        if description:
+            out.append(r"\defdescription{%s}" % description)
         if commands.get("Usage"):
             out.append(r"\defusage{%s}" % codeescape(commands["Usage"]))
         if commands.get("Time"):
@@ -210,7 +215,7 @@ def print_header(data, outstream):
     if not until:
         # Nothing on this page, skip it.
         return
-    with open('header.tmp') as f:
+    with open('build/header.tmp') as f:
         lines = [x.strip() for x in f.readlines()]
     if until not in lines:
         # Nothing new on the page.
@@ -227,7 +232,7 @@ def print_header(data, outstream):
     output = r"\hspace{3mm}\textbf{" + output + "}"
     output = "\\fontsize{%d}{%d}" % (font_size, font_size) + output
     print(output, file=outstream)
-    with open('header.tmp', 'w') as f:
+    with open('build/header.tmp', 'w') as f:
         for line in lines[ind:]:
             f.write(line + "\n")
 

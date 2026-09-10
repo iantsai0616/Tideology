@@ -2,10 +2,10 @@
  * Author: Stanford
  * Source: Stanford Notebook
  * License: MIT
- * Description: Maximizes c^T x subject to Ax <= b and x >= 0.
- * Duality: min b^T y subject to A^T y >= c and y >= 0; finite optima are equal.
- * Returns {value, x}; value is -inf if infeasible and inf if unbounded.
- * Time: O(NM * #pivots), exponential in the worst case
+ * Description: Maximizes $c^T x$ subject to $Ax \le b$ and $x \ge 0$.
+ * Duality: min $b^T y$ subject to $A^T y \ge c$, $y \ge 0$; finite optima agree.
+ * Returns \{value, x\}; value is -inf if infeasible and inf if unbounded.
+ * Time: O(NM * \#pivots), exponential in the worst case
  * Status: stress-tested
  */
 #pragma once
