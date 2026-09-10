@@ -1,7 +1,10 @@
-mkdir -p build
-FILE="$1"
-echo "
-#include \"../content/contest/template.cpp\"
-#include \"../$FILE\"
-" >build/temp.cpp
-g++ -Wall -Wextra -Wfatal-errors -Wconversion -std=c++17 build/temp.cpp && rm a.out build/temp.cpp
+#!/usr/bin/env bash
+set -u
+repo="$1"
+file="$2"
+tmp=$(mktemp -d)
+trap 'rm -rf "$tmp"' EXIT
+printf '#include "%s/content/contest/template.cpp"\n#include "%s"\n' \
+  "$(cd "$repo" && pwd)" "$(cd "$(dirname "$file")" && pwd)/$(basename "$file")" > "$tmp/test.cpp"
+g++ -std=gnu++20 -O2 -Wall -Wextra -Wfatal-errors -Wconversion \
+  "$tmp/test.cpp" -o "$tmp/test"

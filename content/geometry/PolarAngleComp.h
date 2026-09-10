@@ -1,19 +1,19 @@
 /**
- * Author: Simon Lindholm
- * Date: 2017-04-20
- * License: CC0
- * Source: own work
- * Description: 
- * Time: O(\log N)
- * Status: stress-tested
+ * Description: Orders nonzero integer vectors counter-clockwise from +x.
+ * Status: tested
  */
-// -1: a // b (if same), 0/1: a < b
-int cmp(pll a, pll b, bool same = true){
-#define is_neg(k) (sgn(k.Y) < 0 || (sgn(k.Y) == 0 && sgn(k.X) < 0))
-  int A = is_neg(a), B = is_neg(b);
-  if(A != B)
-    return A < B;
-  if(sgn(cross(a, b)) == 0)
-    return same ? abs2(a) < abs2(b) : -1;
-  return sgn(cross(a, b)) > 0;
+#pragma once
+
+#include "Point.h"
+
+typedef Point<ll> P;
+
+// -1 if parallel and same=false, otherwise returns a<b.
+int polarCmp(P a, P b, bool same = true){
+  auto neg = [](P p){ return p.y < 0 || (p.y == 0 && p.x < 0); };
+  int x = neg(a), y = neg(b);
+  if(x != y) return x < y;
+  __int128 c = (__int128)a.x*b.y - (__int128)a.y*b.x;
+  if(!c) return same ? a.dist2() < b.dist2() : -1;
+  return c > 0;
 }

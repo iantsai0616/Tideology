@@ -1,29 +1,25 @@
 /**
- * Author: Simon Lindholm
- * License: CC0
- * Source: Codeforces
- * Description: Given $a[i] = \min_{lo(i) \le k < hi(i)}(f(i, k))$ where the (minimal)
- * optimal $k$ increases with $i$, computes $a[i]$ for $i = L..R-1$.
- * Time: O((N + (hi-lo)) \log N)
- * Status: tested on http://codeforces.com/contest/321/problem/E
+ * Description: dp[i]=min_{k<=i} cost(i, k), assuming opt[i] is monotone.
+ * Time: O((N+K) log N) cost calls
+ * Status: stress-tested
  */
 #pragma once
 
-struct DP { // Modify at will:
-	int lo(int ind) { return 0; }
-	int hi(int ind) { return ind; }
-	ll f(int ind, int k) { return dp[ind][k]; }
-	void store(int ind, int k, ll v) { res[ind] = pii(k, v); }
-
-	void rec(int L, int R, int LO, int HI) {
-		if (L >= R) return;
-		int mid = (L + R) >> 1;
-		pair<ll, int> best(LLONG_MAX, LO);
-		rep(k, max(LO,lo(mid)), min(HI,hi(mid)))
-			best = min(best, make_pair(f(mid, k), k));
-		store(mid, best.second, best.first);
-		rec(L, mid, LO, best.second+1);
-		rec(mid+1, R, best.second, HI);
-	}
-	void solve(int L, int R) { rec(L, R, INT_MIN, INT_MAX); }
-};
+template<class F>
+pair<vector<ll>, vi> dcDP(int n, int k, F cost){
+  vector<ll>dp(n, LLONG_MAX);
+  vi opt(n);
+  auto go = [&](auto self, int l, int r, int ql, int qr)->void{
+    if(l >= r) return;
+    int m = (l + r) / 2, hi = min(qr, m + 1), who = ql;
+    rep(j, ql, hi){
+      ll v = cost(m, j);
+      if(v < dp[m]) dp[m] = v, who = j;
+    }
+    opt[m] = who;
+    self(self, l, m, ql, who + 1);
+    self(self, m + 1, r, who, qr);
+  };
+  go(go, 0, n, 0, k);
+  return {dp, opt};
+}

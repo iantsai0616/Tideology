@@ -1,41 +1,45 @@
 /**
- * Author: Simon Lindholm
- * Date: 2017-04-20
- * License: CC0
- * Source: own work
- * Description: 
- * Time: O(\log N)
+ * Description: Intersection of left sides of directed lines.
+ * inf must bound every feasible point.
+ * Time: O(n log n)
  * Status: stress-tested
  */
-pll area_pair(Line a, Line b) 
-{ return pll(cross(a.Y - a.X, b.X - a.X), cross(a.Y - a.X, b.Y - a.X)); }
-bool isin(Line l0, Line l1, Line l2) {
-  // Check inter(l1, l2) strictly in l0
-  auto [a02X, a02Y] = area_pair(l0, l2);
-  auto [a12X, a12Y] = area_pair(l1, l2);
-  if (a12X - a12Y < 0) a12X *= -1, a12Y *= -1;
-  return (__int128) a02Y * a12X - (__int128) a02X * a12Y > 0;
+#pragma once
+
+#include "Point.h"
+
+typedef Point<double> P;
+const double hpiEps = 1e-9;
+
+struct HalfPlane {
+  P p, d;
+  double angle;
+  HalfPlane(P a, P b) : p(a), d(b - a), angle(atan2(d.y, d.x)){}
+  bool out(P q) const { return d.cross(q - p) < -hpiEps; }
+  bool operator<(const HalfPlane& h) const { return angle < h.angle; }
+};
+P hpInter(const HalfPlane& a, const HalfPlane& b){
+  return a.p + a.d*((b.p - a.p).cross(b.d)/a.d.cross(b.d));
 }
-/* Having solution, check size > 2 */
-/* --^-- Line.X --^-- Line.Y --^-- */
-vector<Line> halfPlaneInter(vector<Line> arr) {
-  sort(iter(arr), [&](Line a, Line b) -> int {
-    if (cmp(a.Y - a.X, b.Y - b.X, 0) != -1)
-      return cmp(a.Y - a.X, b.Y - b.X, 0);
-    return ori(a.X, a.Y, b.Y) < 0;
-  });
-  deque<Line> dq(1, arr[0]);
-  auto pop_back = [&](int t, Line p) {
-    while (SZ(dq) >= t && !isin(p, dq[SZ(dq) - 2], dq.back()))
-      dq.pop_back();
-  };
-  auto pop_front = [&](int t, Line p) {
-    while (SZ(dq) >= t && !isin(p, dq[0], dq[1]))
-      dq.pop_front();
-  };
-  for (auto p : arr)
-    if (cmp(dq.back().Y - dq.back().X, p.Y - p.X, 0) != -1)
-      pop_back(2, p), pop_front(2, p), dq.pb(p);
-  pop_back(3, dq[0]), pop_front(3, dq.back());
-  return vector<Line>(iter(dq));
+vector<P> halfPlaneIntersection(vector<HalfPlane> h, double inf = 1e18){
+  P box[] = {P(inf, inf), P(-inf, inf), P(-inf, -inf), P(inf, -inf)};
+  rep(i, 0, 4) h.emplace_back(box[i], box[(i + 1) % 4]);
+  sort(all(h));
+  deque<HalfPlane> q;
+  for(HalfPlane x : h){
+    while(sz(q) > 1 && x.out(hpInter(q.back(), q[sz(q) - 2]))) q.pop_back();
+    while(sz(q) > 1 && x.out(hpInter(q[0], q[1]))) q.pop_front();
+    if(!q.empty() && abs(x.d.cross(q.back().d)) < hpiEps){
+      if(x.d.dot(q.back().d) < 0) return {};
+      if(x.out(q.back().p)) q.pop_back();
+      else continue;
+    }
+    q.pb(x);
+  }
+  while(sz(q) > 2 && q[0].out(hpInter(q.back(), q[sz(q) - 2]))) q.pop_back();
+  while(sz(q) > 2 && q.back().out(hpInter(q[0], q[1]))) q.pop_front();
+  if(sz(q) < 3) return {};
+  vector<P> ans;
+  rep(i, 0, sz(q)) ans.pb(hpInter(q[i], q[(i + 1) % sz(q)]));
+  return ans;
 }

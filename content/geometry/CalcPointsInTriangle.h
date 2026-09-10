@@ -1,34 +1,50 @@
 /**
- * Author: Simon Lindholm
- * Date: 2017-04-20
- * License: CC0
- * Source: own work
- * Description: 
- * Time: O(\log N)
- * Status: stress-tested
+ * Description: Counts points strictly inside query triangles.
+ * Time: O(n^2m) build, O(1) query
+ * Status: stress-tested, Library Checker
  */
-// all points are distinct
-// cnt[i][j] = # of point k s.t. strictly above ij, and i < k < j
-// cnt2[i][j] = # of points k s.t. strictly in ij
-// preprocess space: O(n^2), time: O(n^3), query time: O(1)
-vector cnt(n, vector<int>(n)), cnt2(n, vector<int>(n));
-for (int i = 0; i < n; i++)
-  for (int j = 0; j < n; j++){
-    if (pts[i] >= pts[j]) continue;
-    for (int k = 0; k < n; k++) {
-      if (pts[i] < pts[k] && pts[k] < pts[j]) {
-        int tmp = ori(pts[i], pts[j], pts[k]);
-        if (tmp > 0) cnt[i][j]++; // only for i < j
-        else if (tmp == 0) cnt2[i][j]++, cnt2[j][i]++;
+#pragma once
+
+#include "Point.h"
+
+typedef Point<ll> P;
+
+struct PointsInTriangle {
+  vector<P> a;
+  vector<vi> left, on;
+  vi pointL, pointM;
+  PointsInTriangle(const vector<P>& a, const vector<P>& b) : a(a),
+      left(sz(a), vi(sz(a))), on(sz(a), vi(sz(a))),
+      pointL(sz(a)), pointM(sz(a)){
+    rep(i, 0, sz(a)) for(P p : b) if(p.y == a[i].y){
+      pointL[i] += p.x < a[i].x;
+      pointM[i] += p.x == a[i].x;
+    }
+    rep(i, 0, sz(a)) rep(j, 0, sz(a)) if(a[i].y < a[j].y){
+      P d = a[j] - a[i];
+      for(P p : b) if(a[i].y < p.y && p.y < a[j].y){
+        ll c = d.cross(p - a[i]);
+        left[i][j] += c > 0;
+        on[i][j] += c == 0;
       }
     }
   }
-auto calc_tri = [&](array<int, 3> arr) { // strictly inside
-  sort(iter(arr), [&](int x, int y){ return pts[x] < pts[y]; });
-  auto [x, y, z] = arr;
-  int tmp = ori(pts[x], pts[y], pts[z]);
-  if (tmp == 0) return 0;
-  else if (tmp < 0)
-    return cnt[x][z] - cnt[x][y] - cnt[y][z] - cnt2[x][y] - cnt2[y][z] - 1;
-  else return cnt[x][y] + cnt[y][z] - cnt[x][z] - cnt2[x][z];
+  int query(int x, int y, int z){
+    auto cmp = [&](int i, int j){
+      return tie(a[i].y, a[i].x) < tie(a[j].y, a[j].x);
+    };
+    if(cmp(y, x)) swap(x, y);
+    if(cmp(z, y)) swap(y, z);
+    if(cmp(y, x)) swap(x, y);
+    ll d = (a[x] - a[z]).cross(a[y] - a[z]);
+    if(!d) return 0;
+    if(a[x].y == a[y].y)
+      return left[y][z] - left[x][z] - on[x][z];
+    if(a[y].y == a[z].y)
+      return left[x][z] - left[x][y] - on[x][y];
+    if(d < 0) return left[x][z] - left[y][z] - on[y][z] -
+      left[x][y] - on[x][y] - pointL[y] - pointM[y];
+    return left[x][y] + left[y][z] + pointL[y] -
+      left[x][z] - on[x][z];
+  }
 };

@@ -1,65 +1,25 @@
 /**
- * Author: Simon Lindholm
- * Date: 2017-04-20
- * License: CC0
- * Source: own work
- * Description: Given a sets of points on 2D plane, find a triangulation such that no points will strictly inside circumcircle of any triangle.
- * Time: O(\log N)
+ * Description: O(N^2) Delaunay triangulation.
+ * No three points may be collinear and no four cocircular.
  * Status: stress-tested
  */
-struct Edge {
-  int id; // oidx[id]
-  list<Edge>::iterator twin;
-  Edge(int _id = 0):id(_id) {}
-};
-struct Delaunay { // 0-base
-  int n;
-  vector<int> oidx;
-  vector<list<Edge>> head; // result udir. graph
-  vector<pll> p;
-  Delaunay(int _n, vector<pll> _p): n(_n), oidx(n), head(n), p(n) {
-    iota(iter(oidx), 0);
-    for (int i = 0; i < n; ++i) head[i].clear();
-    sort(iter(oidx), [&](int a, int b) 
-        { return _p[a] < _p[b]; });
-    for (int i = 0; i < n; ++i) p[i] = _p[oidx[i]];
-    divide(0, n - 1);
+#pragma once
+
+#include "Point.h"
+#include "3dHull.h"
+
+template<class P>
+vector<array<int, 3>> delaunay(const vector<P> &ps){
+  vector<array<int, 3>>ans;
+  if(sz(ps) == 3){
+    int d = ps[0].cross(ps[1], ps[2]) < 0;
+    ans.pb({0, 1 + d, 2 - d});
   }
-  void addEdge(int u, int v) {
-    head[u].push_front(Edge(v));
-    head[v].push_front(Edge(u));
-    head[u].begin()->twin = head[v].begin();
-    head[v].begin()->twin = head[u].begin();
+  vector<P3>p3;
+  for(P p : ps) p3.emplace_back(p.x, p.y, p.dist2());
+  if(sz(ps) > 3) for(auto t : hull3d(p3)){
+    P3 z = (p3[t.b] - p3[t.a]).cross(p3[t.c] - p3[t.a]);
+    if(z.dot(P3(0, 0, 1)) < 0) ans.pb({t.a, t.c, t.b});
   }
-  void divide(int l, int r) {
-    if (l == r) return;
-    if (l + 1 == r) return addEdge(l, l + 1);
-    int mid = (l + r) >> 1, nw[2] = {l, r};
-    divide(l, mid), divide(mid + 1, r);
-    auto gao = [&](int t) {
-      pll pt[2] = {p[nw[0]], p[nw[1]]};
-      for (auto it : head[nw[t]]) {
-        int v = ori(pt[1], pt[0], p[it.id]);
-        if (v > 0 || (v == 0 && abs2(pt[t ^ 1] - p[it.id]) < abs2(pt[1] - pt[0])))
-          return nw[t] = it.id, true;
-      }
-      return false;
-    };
-    while (gao(0) || gao(1));
-    addEdge(nw[0], nw[1]); // add tangent
-    while (true) {
-      pll pt[2] = {p[nw[0]], p[nw[1]]};
-      int ch = -1, sd = 0;
-      for (int t = 0; t < 2; ++t)
-        for (auto it : head[nw[t]])
-          if (ori(pt[0], pt[1], p[it.id]) > 0 && (ch == -1 || in_cc({pt[0], pt[1], p[ch]}, p[it.id])))
-            ch = it.id, sd = t;
-      if (ch == -1) break; // upper common tangent
-      for (auto it = head[nw[sd]].begin(); it != head[nw[sd]].end(); )
-        if (seg_strict_intersect(pt[sd], p[it->id], pt[sd ^ 1], p[ch]))
-          head[it->id].erase(it->twin), head[nw[sd]].erase(it++);
-        else ++it;
-      nw[sd] = ch, addEdge(nw[0], nw[1]);
-    }
-  }
-};
+  return ans;
+}

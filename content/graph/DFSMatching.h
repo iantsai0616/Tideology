@@ -1,38 +1,36 @@
 /**
- * Author: Lukas Polacek
- * Date: 2009-10-28
- * License: CC0
- * Source:
- * Description: Simple bipartite matching algorithm. Graph $g$ should be a list
- * of neighbors of the left partition, and $btoa$ should be a vector full of
- * -1's of the same size as the right partition. Returns the size of
- * the matching. $btoa[i]$ will be the match for vertex $i$ on the right side,
- * or $-1$ if it's not matched.
+ * Description: Simple bipartite matching. r[v] is the left match of right v.
  * Time: O(VE)
- * Usage: vi btoa(m, -1); dfsMatching(g, btoa);
- * Status: works
+ * Status: stress-tested
  */
 #pragma once
 
-bool find(int j, vector<vi>& g, vi& btoa, vi& vis) {
-	if (btoa[j] == -1) return 1;
-	vis[j] = 1; int di = btoa[j];
-	for (int e : g[di])
-		if (!vis[e] && find(e, g, btoa, vis)) {
-			btoa[e] = di;
-			return 1;
-		}
-	return 0;
-}
-int dfsMatching(vector<vi>& g, vi& btoa) {
-	vi vis;
-	rep(i,0,sz(g)) {
-		vis.assign(sz(btoa), 0);
-		for (int j : g[i])
-			if (find(j, g, btoa, vis)) {
-				btoa[j] = i;
-				break;
-			}
-	}
-	return sz(btoa) - (int)count(all(btoa), -1);
-}
+struct DFSMatching{
+  int n, m;
+  vector<vi>g;
+  vi r, vis;
+  DFSMatching(int N, int M): n(N), m(M), g(N){}
+  void addEdge(int u, int v){
+    g[u].pb(v);
+  }
+  bool dfs(int u){
+    if(vis[u]) return 0;
+    vis[u] = 1;
+    for(int v : g[u]){
+      if(r[v] == -1 or dfs(r[v])){
+        r[v] = u;
+        return 1;
+      }
+    }
+    return 0;
+  }
+  pair<int, vi> calc(){
+    int ans = 0;
+    r.assign(m, -1);
+    rep(i, 0, n){
+      vis.assign(n, 0);
+      ans += dfs(i);
+    }
+    return {ans, r};
+  }
+};

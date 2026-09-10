@@ -1,19 +1,19 @@
 /**
- * Author: Simon Lindholm
- * Date: 2017-04-20
- * License: CC0
- * Source: own work
- * Description: 
- * Time: O(\log N)
- * Status: stress-tested
+ * Description: Tests whether cur->p lies in the polygon angle at cur.
+ * Time: O(1)
+ * Status: tested
  */
-// ori(a, b, c) >= 0, valid: "strict" angle from a-b to a-c
-bool btwangle(pll a, pll b, pll c, pll p, int strict) {
-  return ori(a, b, p) >= strict && ori(a, p, c) >= strict;
+#pragma once
+
+#include "Point.h"
+
+typedef Point<ll> P;
+
+bool betweenAngle(P a, P b, P c, P p, int strict){
+  return a.cross(b, p) >= strict && a.cross(p, c) >= strict;
 }
-// whether vector{cur, p} in counter-clockwise order prv, cur, nxt
-bool inside(pll prv, pll cur, pll nxt, pll p, int strict) {
-  if (ori(cur, nxt, prv) >= 0)
-    return btwangle(cur, nxt, prv, p, strict);
-  return !btwangle(cur, prv, nxt, p, !strict);
+bool inCone(P prv, P cur, P nxt, P p, int strict = true){
+  if(cur.cross(nxt, prv) >= 0)
+    return betweenAngle(cur, nxt, prv, p, strict);
+  return !betweenAngle(cur, prv, nxt, p, !strict);
 }

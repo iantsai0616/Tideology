@@ -1,38 +1,31 @@
 /**
- * Author: Johan Sannemo
- * Date: 2015-02-06
- * License: CC0
- * Source: Folklore
- * Description: Calculate power of two jumps in a tree,
- * to support fast upward jumps and LCAs.
- * Assumes the root node points to itself.
- * Time: construction $O(N \log N)$, queries $O(\log N)$
- * Status: Tested at Petrozavodsk, also stress-tested via LCA.cpp
+ * Description: Binary lifting for upward jumps and LCA.
+ * The root must be its own parent.
+ * Time: O(N log N) build, O(log N) query
+ * Status: stress-tested
  */
 #pragma once
 
-vector<vi> treeJump(vi& P){
-	int on = 1, d = 1;
-	while(on < sz(P)) on *= 2, d++;
-	vector<vi> jmp(d, P);
-	rep(i,1,d) rep(j,0,sz(P))
-		jmp[i][j] = jmp[i-1][jmp[i-1][j]];
-	return jmp;
-}
-
-int jmp(vector<vi>& tbl, int nod, int steps){
-	rep(i,0,sz(tbl))
-		if(steps&(1<<i)) nod = tbl[i][nod];
-	return nod;
-}
-
-int lca(vector<vi>& tbl, vi& depth, int a, int b) {
-	if (depth[a] < depth[b]) swap(a, b);
-	a = jmp(tbl, a, depth[a] - depth[b]);
-	if (a == b) return a;
-	for (int i = sz(tbl); i--;) {
-		int c = tbl[i][a], d = tbl[i][b];
-		if (c != d) a = c, b = d;
-	}
-	return tbl[0][a];
-}
+struct BinaryLifting{
+  int n, lg = 1;
+  vector<vi>up;
+  vi dep;
+  BinaryLifting(const vi &par, const vi &depth): n(sz(par)), dep(depth){
+    while((1LL << lg) < n) lg++;
+    up.assign(lg, par);
+    rep(i, 1, lg) rep(v, 0, n) up[i][v] = up[i - 1][up[i - 1][v]];
+  }
+  int jump(int u, int k){
+    rep(i, 0, lg) if(k >> i & 1) u = up[i][u];
+    return u;
+  }
+  int lca(int u, int v){
+    if(dep[u] < dep[v]) swap(u, v);
+    u = jump(u, dep[u] - dep[v]);
+    if(u == v) return u;
+    for(int i = lg; i--;){
+      if(up[i][u] != up[i][v]) u = up[i][u], v = up[i][v];
+    }
+    return up[0][u];
+  }
+};

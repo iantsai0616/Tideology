@@ -1,61 +1,47 @@
 /**
- * Author: Chen Xing
- * Date: 2009-10-13
- * License: CC0
- * Source: N/A
- * Description: Fast bipartite matching algorithm. Graph $g$ should be a list
- * of neighbors of the left partition, and $btoa$ should be a vector full of
- * -1's of the same size as the right partition. Returns the size of
- * the matching. $btoa[i]$ will be the match for vertex $i$ on the right side,
- * or $-1$ if it's not matched.
- * Usage: vi btoa(m, -1); hopcroftKarp(g, btoa);
- * Time: O(\sqrt{V}E)
- * Status: stress-tested by MinimumVertexCover, and tested on oldkattis.adkbipmatch and SPOJ:MATCHING
+ * Description: Maximum bipartite matching. r[v] is the left match of right v.
+ * Time: O(E sqrt(V))
+ * Status: stress-tested
  */
 #pragma once
 
-bool dfs(int a, int L, vector<vi>& g, vi& btoa, vi& A, vi& B) {
-	if (A[a] != L) return 0;
-	A[a] = -1;
-	for (int b : g[a]) if (B[b] == L + 1) {
-		B[b] = 0;
-		if (btoa[b] == -1 || dfs(btoa[b], L + 1, g, btoa, A, B))
-			return btoa[b] = a, 1;
-	}
-	return 0;
-}
-
-int hopcroftKarp(vector<vi>& g, vi& btoa) {
-	int res = 0;
-	vi A(g.size()), B(btoa.size()), cur, next;
-	for (;;) {
-		fill(all(A), 0);
-		fill(all(B), 0);
-		/// Find the starting nodes for BFS (i.e. layer 0).
-		cur.clear();
-		for (int a : btoa) if(a != -1) A[a] = -1;
-		rep(a,0,sz(g)) if(A[a] == 0) cur.push_back(a);
-		/// Find all layers using bfs.
-		for (int lay = 1;; lay++) {
-			bool islast = 0;
-			next.clear();
-			for (int a : cur) for (int b : g[a]) {
-				if (btoa[b] == -1) {
-					B[b] = lay;
-					islast = 1;
-				}
-				else if (btoa[b] != a && !B[b]) {
-					B[b] = lay;
-					next.push_back(btoa[b]);
-				}
-			}
-			if (islast) break;
-			if (next.empty()) return res;
-			for (int a : next) A[a] = lay;
-			cur.swap(next);
-		}
-		/// Use DFS to scan for augmenting paths.
-		rep(a,0,sz(g))
-			res += dfs(a, 0, g, btoa, A, B);
-	}
-}
+struct HopcroftKarp{
+  int n, m;
+  vector<vi>g;
+  vi l, r, d, q;
+  HopcroftKarp(int N, int M): n(N), m(M), g(N), q(N){}
+  void addEdge(int u, int v){
+    g[u].pb(v);
+  }
+  bool dfs(int u){
+    int z = exchange(d[u], 0) + 1;
+    for(int v : g[u]){
+      if(r[v] == -1 or (d[r[v]] == z and dfs(r[v]))){
+        l[u] = v;
+        r[v] = u;
+        return 1;
+      }
+    }
+    return 0;
+  }
+  pair<int, vi> calc(){
+    int ans = 0;
+    l.assign(n, -1);
+    r.assign(m, -1);
+    for(;;){
+      int s = 0, t = 0;
+      bool found = 0;
+      d.assign(n, 0);
+      rep(i, 0, n) if(l[i] == -1) q[t++] = i, d[i] = 1;
+      while(s < t){
+        int u = q[s++];
+        for(int v : g[u]){
+          if(r[v] == -1) found = 1;
+          else if(!d[r[v]]) d[r[v]] = d[u] + 1, q[t++] = r[v];
+        }
+      }
+      if(!found) return {ans, r};
+      rep(i, 0, n) if(l[i] == -1) ans += dfs(i);
+    }
+  }
+};

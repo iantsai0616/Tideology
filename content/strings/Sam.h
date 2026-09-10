@@ -1,76 +1,46 @@
 /**
- * Author: Simon Lindholm
- * Date: 2017-04-20
- * License: CC0
- * Source: own work
- * Description: 
- * Time: O(\log N)
+ * Description: Generalized suffix automaton for lowercase strings.
+ * Construct with total length, insert strings, build, then solve for cnt.
+ * Time: O(N alphabet)
  * Status: stress-tested
  */
-// == PART HASH ==
-struct exSAM {
-  const int CNUM = 26;
-  // len: maxlength, link: fail link
-  // lenSorted: topo order, cnt: occur
-  vector<int> len, link, lenSorted, cnt;
-  vector<vector<int>> next;
-  int total = 0;
-  int newnode() {
-    return total++; 
+#pragma once
+
+struct exSAM{
+  static const int C = 27;
+  vector<int>len, link, ord, cnt;
+  vector<array<int, C>>go;
+  int last;
+  exSAM(int n){
+    len.reserve(4 * n + 5), link.reserve(4 * n + 5), cnt.reserve(4 * n + 5), go.reserve(4 * n + 5);
+    node(); link[0] = -1, last = 0;
   }
-  void init(int n) { // total number of characters
-    len.assign(2 * n, 0); link.assign(2 * n, 0);
-    lenSorted.assign(2 * n, 0); cnt.assign(2 * n, 0);
-    next.assign(2 * n, vector<int>(CNUM));
-    newnode(), link[0] = -1; 
+  int node(){
+    len.pb(0), link.pb(0), cnt.pb(0), go.pb({}); return sz(len) - 1;
   }
-// == PART HASH ==
-  int insertSAM(int last, int c) { // SCOPE HASH
-    // not exSAM: cur = newnode(), p = last
-    int cur = next[last][c];
-    len[cur] = len[last] + 1;
-    int p = link[last];
-    while (p != -1 && !next[p][c])
-      next[p][c] = cur, p = link[p];
-    if (p == -1) return link[cur] = 0, cur;
-    int q = next[p][c];
-    if (len[p] + 1 == len[q]) return link[cur] = q, cur;
-    int clone = newnode();
-    for (int i = 0; i < CNUM; ++i)
-      next[clone][i] = len[next[q][i]] ? next[q][i] : 0;
-    len[clone] = len[p] + 1;
-    while (p != -1 && next[p][c] == q)
-      next[p][c] = clone, p = link[p];
-    link[link[cur] = clone] = link[q];
-    link[q] = clone;
-    return cur;
+  void extend(int c){
+    int cur = node(), p = last; len[cur] = len[last] + 1, cnt[cur] = 1, last = cur;
+    for(; p != -1 and !go[p][c]; p = link[p]) go[p][c] = cur;
+    if(p == -1) return link[cur] = 0, void();
+    int q = go[p][c];
+    if(len[p] + 1 == len[q]) return link[cur] = q, void();
+    int cl = node(); go[cl] = go[q], len[cl] = len[p] + 1, link[cl] = link[q];
+    for(; p != -1 and go[p][c] == q; p = link[p]) go[p][c] = cl;
+    link[q] = link[cur] = cl;
   }
-  void insert(const string &s) { // SCOPE HASH
-    int cur = 0;
-    for (auto ch : s) {
-      int &nxt = next[cur][int(ch - 'a')];
-      if (!nxt) nxt = newnode();
-      cnt[cur = nxt] += 1;
+  void insert(const string &s){
+    for(char c : s) extend(c - 'a');
+    extend(26);
+  }
+  void build(){
+    int n = sz(len); ord.resize(n); vector<int>sum(len[last] + 1);
+    rep(i, 0, n) ++sum[len[i]];
+    partial_sum(all(sum), sum.begin());
+    rep(i, 0, n) ord[--sum[len[i]]] = i;
+  }
+  void solve(){
+    for(int i = sz(ord) - 1; i; --i){
+      int u = ord[i]; cnt[link[u]] += cnt[u];
     }
-  }
-// == PART HASH ==
-  void build() {
-    queue<int> q;
-    q.push(0);
-    while (!q.empty()) {
-      int cur = q.front();
-      q.pop();
-      for (int i = 0; i < CNUM; ++i)
-        if (next[cur][i])
-          q.push(insertSAM(cur, i));
-    }
-    vector<int> lc(total);
-    for (int i = 1; i < total; ++i) ++lc[len[i]];
-    partial_sum(iter(lc), lc.begin());
-    for (int i = 1; i < total; ++i) lenSorted[--lc[len[i]]] = i;
-  }
-  void solve() {
-    for (int i = total - 2; i >= 0; --i)
-      cnt[link[lenSorted[i]]] += cnt[lenSorted[i]];
   }
 };
