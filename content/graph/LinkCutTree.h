@@ -1,6 +1,12 @@
 /**
  * Description: 1-based link-cut tree with path and rooted-subtree aggregates.
  *  Val and SVal need + and -; Val also needs reverse-order aggregation.
+ * Usage:
+ *  access(u): expose root-u path, splay u, and clear its right child.
+ *  chroot(u): make u the represented-tree root.
+ *  split(u, v): expose path u-v in v; its aggregate is o[v].sum.
+ *  vir stores virtual-child aggregates; access moves preferred children
+ *  into/out of vir. sub includes both aux children, vir, and sv.
  * Time: O(log N) amortized
  * Status: stress-tested
  */

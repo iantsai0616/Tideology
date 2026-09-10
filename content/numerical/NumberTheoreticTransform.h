@@ -1,6 +1,6 @@
 /**
  * Source: KACTL-style cached roots, DIF/DIT convolution
- * Description: NTT/convolution modulo 998244353, up to size 2^23.
+ * Description: NTT/convolution modulo 998244353, up to size $2^{23}$.
  * Time: O(N log N)
  * Status: stress-tested and benchmarked
  */

@@ -1,5 +1,5 @@
 /**
- * Description: Small AVX2 helpers. Uses fixed-width types with #define int.
+ * Description: Small AVX2 helpers. Uses fixed-width types with \#define int.
  * Status: x86-64 test included
  */
 #pragma once

@@ -1,5 +1,5 @@
 /**
- * Description: O(N^2) Delaunay triangulation.
+ * Description: $O(N^2)$ Delaunay triangulation.
  * No three points may be collinear and no four cocircular.
  * Status: stress-tested
  */

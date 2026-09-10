@@ -85,8 +85,8 @@ struct MCMF{
     }
     return {totflow, totcost / 2};
   }
-  // 有負邊先 setpi(s)；換源點或改過流量後要重跑。
-  // SSP 不支援負環，這類題改用 CostScalingMCMF。
+  // Negative edges: run setpi(s); rerun after changing source or flow.
+  // Negative cycles: use CostScalingMCMF.
   void setpi(int s){
     fill(all(pi), MCMF_INF);
     pi[s] = 0;

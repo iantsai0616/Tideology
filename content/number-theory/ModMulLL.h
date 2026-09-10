@@ -1,6 +1,6 @@
 /**
  * Author: chilli, Ramchandra Apte, Noam527, Simon Lindholm
- * Description: Portable a*b mod M for 0 <= a, b < M < 2^64.
+ * Description: Portable a*b mod M for $0 \le a, b < M < 2^{64}$.
  * Time: O(1) for modmul, O(log e) for modpow
  * Status: stress-tested
  */

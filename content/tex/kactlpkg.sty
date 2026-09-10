@@ -135,12 +135,12 @@
                                    {\normalfont\LARGE\bfseries}}
 
 \renewcommand\subsection{\@startsection{subsection}{2}{\z@}
-	{1ex\@plus -1ex \@minus -.3ex}
+	{1ex\@plus 1ex \@minus .3ex}
 	{.2ex}
 	{\normalfont\large\bfseries}}
 
 \renewcommand\subsubsection{\@startsection{subsubsection}{3}{\z@}
-	{1ex\@plus -1ex \@minus -.3ex}
+	{1ex\@plus 1ex \@minus .3ex}
 	{1ex \@plus .2ex}
 	{\normalfont\large\bfseries}}
 
@@ -221,7 +221,9 @@
 	\begin{center}
 		\strut % Magic
 		\vspace{3cm}\\
-		\includegraphics[width=3cm]{\@unilogo}\\
+		\ifx\@unilogo\@empty\else
+			\includegraphics[width=3cm]{\@unilogo}\\
+		\fi
 		{\fontsize{25}{30}\selectfont \@unilong\\}
 		{\fontsize{60}{60}\selectfont \@teamname\\}
 		\vspace{0.5cm}

@@ -1,6 +1,6 @@
 /**
  * Description: Exact convolution modulo M using three NTT primes and CRT.
- * Supports transform lengths up to 2^21.
+ * Supports transform lengths up to $2^{21}$.
  * Time: O(N log N)
  * Status: stress-tested, Library Checker
  */

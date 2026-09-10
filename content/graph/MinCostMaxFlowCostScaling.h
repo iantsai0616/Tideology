@@ -23,7 +23,8 @@ struct CostScalingMCMF{
   vector<ll>excess, pi;
   vi ptr, inq;
   CostScalingMCMF(int N) : N(N), ed(N), excess(N), pi(N), ptr(N), inq(N){}
-  // 支援負邊與有限容量負環；不支援負 cost 自環與無界答案。
+  // Supports negative edges/cycles with finite capacities.
+  // No negative-cost self-loops or unbounded instances.
   void addEdge(int from, int to, ll cap, ll cost){
     if(from == to){
       assert(cost >= 0);
@@ -136,7 +137,7 @@ struct CostScalingMCMF{
     return flow;
   }
   pair<ll, ll> maxflow(int s, int t){
-    // 先求任意最大流，再用 circulation 降低費用。
+    // Find any max flow, then reduce cost by circulation.
     ll totflow = maxFlow(s, t);
     ll eps = 0;
     rep(i, 0, N){
