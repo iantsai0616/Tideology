@@ -4,7 +4,7 @@
  * License: CC0
  * Source: hacKIT, NWERC 2015
  * Description: A set (not multiset!) with support for finding the n'th
- * For multiset, change less to less_equal, but lower_bound will become upper_bound and you can only erase iterator
+ * For multiset, change less to less\_equal, but lower\_bound will become upper\_bound and you can only erase iterator
  * element, and finding the index of an element.
  * To get a map, change \texttt{null\_type}.
  * Time: O(\log N)
