@@ -88,6 +88,10 @@
 \fancyheadoffset{0pt}
 \fancyfootoffset{0pt}
 \setlength\headsep{5pt}
+\fancypagestyle{teampage}{
+	\fancyhf{}
+	\rhead{\thepage}
+}
 
 \renewcommand\chapter{
 	\global\@topnum\z@
@@ -216,8 +220,8 @@
 \pdfsuppresswarningpagegroup=1
 
 \newcommand{\maketeampage}{
-	\pagestyle{empty}
-	\setcounter{page}{0}
+	\thispagestyle{teampage}
+	\setcounter{page}{1}
 	\begin{center}
 		\strut % Magic
 		\vspace{3cm}\\
