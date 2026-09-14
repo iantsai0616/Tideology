@@ -39,6 +39,8 @@ struct HashInterval {
   }
 };
 
+H hashString(string& s){H h{}; for(char c:s) h=h*C+c;return h;} // PART HASH = d099fb
+
 vector<H> getHashes(string& str, int length){
   if(sz(str) < length) return {};
   H h = 0, pw = 1;
@@ -49,6 +51,6 @@ vector<H> getHashes(string& str, int length){
     ret.push_back(h = h * C + str[i] - pw * str[i-length]);
   }
   return ret;
-}
+} // FULL HASH = 3fdef6
 
-H hashString(string& s){H h{}; for(char c:s) h=h*C+c;return h;}
+

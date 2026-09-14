@@ -28,13 +28,14 @@
 \contentsline {section}{\numberline {4.4}Fourier transforms}{8}{section.4.4}%
 \contentsline {chapter}{\numberline {5}Number theory}{9}{chapter.5}%
 \contentsline {section}{\numberline {5.1}Modular arithmetic}{9}{section.5.1}%
+\contentsline {subsection}{\numberline {5.1.1}Nice Primes}{9}{subsection.5.1.1}%
 \contentsline {section}{\numberline {5.2}Primality}{9}{section.5.2}%
 \contentsline {section}{\numberline {5.3}Divisibility}{10}{section.5.3}%
 \contentsline {subsection}{\numberline {5.3.1}Bézout's identity}{10}{subsection.5.3.1}%
 \contentsline {section}{\numberline {5.4}Fractions}{10}{section.5.4}%
 \contentsline {section}{\numberline {5.5}Pythagorean Triples}{10}{section.5.5}%
-\contentsline {section}{\numberline {5.6}Primes}{10}{section.5.6}%
-\contentsline {section}{\numberline {5.7}Estimates}{10}{section.5.7}%
+\contentsline {section}{\numberline {5.6}Primes}{11}{section.5.6}%
+\contentsline {section}{\numberline {5.7}Estimates}{11}{section.5.7}%
 \contentsline {section}{\numberline {5.8}Mobius Function}{11}{section.5.8}%
 \contentsline {chapter}{\numberline {6}Combinatorial}{11}{chapter.6}%
 \contentsline {section}{\numberline {6.1}Permutations}{11}{section.6.1}%
@@ -52,7 +53,7 @@
 \contentsline {subsection}{\numberline {6.3.3}Eulerian numbers}{11}{subsection.6.3.3}%
 \contentsline {subsection}{\numberline {6.3.4}Stirling numbers of the second kind}{11}{subsection.6.3.4}%
 \contentsline {subsection}{\numberline {6.3.5}Bell numbers}{11}{subsection.6.3.5}%
-\contentsline {subsection}{\numberline {6.3.6}Labeled unrooted trees}{11}{subsection.6.3.6}%
+\contentsline {subsection}{\numberline {6.3.6}Labeled unrooted trees}{12}{subsection.6.3.6}%
 \contentsline {subsection}{\numberline {6.3.7}Catalan numbers}{12}{subsection.6.3.7}%
 \contentsline {chapter}{\numberline {7}Graph}{12}{chapter.7}%
 \contentsline {section}{\numberline {7.1}Fundamentals}{12}{section.7.1}%
@@ -75,7 +76,7 @@
 \contentsline {chapter}{\numberline {9}Strings}{22}{chapter.9}%
 \contentsline {chapter}{\numberline {10}Various}{24}{chapter.10}%
 \contentsline {section}{\numberline {10.1}Intervals}{24}{section.10.1}%
-\contentsline {section}{\numberline {10.2}Misc. algorithms}{25}{section.10.2}%
+\contentsline {section}{\numberline {10.2}Misc. algorithms}{24}{section.10.2}%
 \contentsline {section}{\numberline {10.3}Dynamic programming}{25}{section.10.3}%
 \contentsline {section}{\numberline {10.4}Debugging tricks}{25}{section.10.4}%
 \contentsline {section}{\numberline {10.5}Optimization tricks}{25}{section.10.5}%
