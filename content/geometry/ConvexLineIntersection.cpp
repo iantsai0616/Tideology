@@ -1,3 +1,6 @@
+/**
+ * Description:
+ */
 int TangentDir(vector<pll> &C, pll dir) {
   return cyc_tsearch(SZ(C), [&](int a, int b) {
     return cross(dir, C[a]) > cross(dir, C[b]); 

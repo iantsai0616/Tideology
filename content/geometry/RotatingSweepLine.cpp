@@ -1,3 +1,6 @@
+/**
+ * Description:
+ */
 struct Event {
   pll d; int u, v;
   bool operator<(const Event &b) const {

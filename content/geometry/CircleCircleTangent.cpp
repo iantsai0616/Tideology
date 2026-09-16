@@ -1,3 +1,6 @@
+/**
+ * Description:
+ */
 vector<Line> CCtang( const Cir& c1 , const Cir& c2 , int sign1 ){
   vector<Line> ret;
   double d_sq = abs2( c1.O - c2.O );

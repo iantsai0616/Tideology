@@ -1,3 +1,6 @@
+/**
+ * Description:
+ */
 /* The point should be strictly out of hull
   return arbitrary point on the tangent line */
 pii get_tangent(vector<pll> &C, pll p) {

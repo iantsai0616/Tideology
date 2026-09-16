@@ -1,3 +1,6 @@
+/**
+ * Description:
+ */
 // return q's relation with circumcircle of tri(p[0],p[1],p[2])
 bool in_cc(const array<pll, 3> &p, pll q) {
   __int128 det = 0;

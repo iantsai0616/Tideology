@@ -1,3 +1,6 @@
+/**
+ * Description:
+ */
 pdd circenter(pdd p0, pdd p1, pdd p2) { // SCOPE HASH
   p1 = p1 - p0, p2 = p2 - p0; // radius = abs(center)
   double x1 = p1.X, y1 = p1.Y, x2 = p2.X, y2 = p2.Y;   

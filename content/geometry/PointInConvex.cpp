@@ -1,3 +1,6 @@
+/**
+ * Description:
+ */
 bool PointInConvex(const vector<pll> &C, pll p, bool strict = true) {
   int a = 1, b = SZ(C) - 1, r = !strict;
   if (SZ(C) == 0) return false;

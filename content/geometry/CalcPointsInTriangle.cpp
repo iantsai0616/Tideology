@@ -1,3 +1,6 @@
+/**
+ * Description:
+ */
 // all points are distinct
 // cnt[i][j] = # of point k s.t. strictly above ij, and i < k < j
 // cnt2[i][j] = # of points k s.t. strictly in ij

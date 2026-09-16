@@ -1,3 +1,6 @@
+/**
+ * Description:
+ */
 ld rat(pll a, pll b) {
   return sgn(b.X) ? (ld)a.X / b.X : (ld)a.Y / b.Y;
 } // all poly. should be ccw

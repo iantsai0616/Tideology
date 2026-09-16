@@ -58,25 +58,20 @@
 \contentsline {chapter}{\numberline {7}Graph}{11}{chapter.7}%
 \contentsline {section}{\numberline {7.1}Fundamentals}{11}{section.7.1}%
 \contentsline {section}{\numberline {7.2}Network flow}{12}{section.7.2}%
-\contentsline {section}{\numberline {7.3}Matching}{13}{section.7.3}%
-\contentsline {section}{\numberline {7.4}Matroids}{14}{section.7.4}%
-\contentsline {section}{\numberline {7.5}DFS algorithms}{14}{section.7.5}%
-\contentsline {section}{\numberline {7.6}Coloring}{16}{section.7.6}%
-\contentsline {section}{\numberline {7.7}Heuristics}{16}{section.7.7}%
-\contentsline {section}{\numberline {7.8}Trees}{16}{section.7.8}%
-\contentsline {section}{\numberline {7.9}Math}{18}{section.7.9}%
-\contentsline {subsection}{\numberline {7.9.1}Number of Spanning Trees}{18}{subsection.7.9.1}%
-\contentsline {subsection}{\numberline {7.9.2}Erdős–Gallai theorem}{18}{subsection.7.9.2}%
+\contentsline {section}{\numberline {7.3}Matching}{14}{section.7.3}%
+\contentsline {section}{\numberline {7.4}DFS algorithms}{15}{section.7.4}%
+\contentsline {section}{\numberline {7.5}Coloring}{16}{section.7.5}%
+\contentsline {section}{\numberline {7.6}Heuristics}{17}{section.7.6}%
+\contentsline {section}{\numberline {7.7}Trees}{17}{section.7.7}%
+\contentsline {section}{\numberline {7.8}Math}{18}{section.7.8}%
+\contentsline {subsection}{\numberline {7.8.1}Number of Spanning Trees}{18}{subsection.7.8.1}%
+\contentsline {subsection}{\numberline {7.8.2}Erdős–Gallai theorem}{18}{subsection.7.8.2}%
 \contentsline {chapter}{\numberline {8}Geometry}{18}{chapter.8}%
-\contentsline {section}{\numberline {8.1}Geometric primitives}{18}{section.8.1}%
-\contentsline {section}{\numberline {8.2}Circles}{19}{section.8.2}%
-\contentsline {section}{\numberline {8.3}Polygons}{19}{section.8.3}%
-\contentsline {section}{\numberline {8.4}Misc. Point Set Problems}{20}{section.8.4}%
-\contentsline {section}{\numberline {8.5}3D}{21}{section.8.5}%
+\contentsline {section}{\numberline {8.1}Geometry}{18}{section.8.1}%
 \contentsline {chapter}{\numberline {9}Strings}{22}{chapter.9}%
 \contentsline {chapter}{\numberline {10}Various}{24}{chapter.10}%
 \contentsline {section}{\numberline {10.1}Intervals}{24}{section.10.1}%
-\contentsline {section}{\numberline {10.2}Misc. algorithms}{24}{section.10.2}%
+\contentsline {section}{\numberline {10.2}Misc. algorithms}{25}{section.10.2}%
 \contentsline {section}{\numberline {10.3}Dynamic programming}{25}{section.10.3}%
 \contentsline {section}{\numberline {10.4}Debugging tricks}{25}{section.10.4}%
 \contentsline {section}{\numberline {10.5}Optimization tricks}{25}{section.10.5}%

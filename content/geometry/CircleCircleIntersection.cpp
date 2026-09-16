@@ -1,3 +1,6 @@
+/**
+ * Description:
+ */
 bool CCinter(Cir &a, Cir &b, pdd &p1, pdd &p2) {
   pdd o1 = a.O, o2 = b.O;
   double r1 = a.R, r2 = b.R, d2 = abs2(o1 - o2), d = sqrt(d2);

@@ -1,3 +1,6 @@
+/**
+ * Description:
+ */
 double _area(pdd pa, pdd pb, double r){	
   if(abs(pa)<abs(pb)) swap(pa, pb);
   if(abs(pb)<eps) return 0;

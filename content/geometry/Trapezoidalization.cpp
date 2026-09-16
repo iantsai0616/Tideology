@@ -1,3 +1,6 @@
+/**
+ * Description:
+ */
 template<class T>
 struct SweepLine {
   struct cmp {

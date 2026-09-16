@@ -1,3 +1,6 @@
+/**
+ * Description:
+ */
 // -1: a // b (if same), 0/1: a < b
 int cmp(pll a, pll b, bool same = true){
 #define is_neg(k) (sgn(k.Y) < 0 || (sgn(k.Y) == 0 && sgn(k.X) < 0))
