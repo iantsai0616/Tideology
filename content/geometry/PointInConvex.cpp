@@ -2,9 +2,9 @@
  * Description:
  */
 bool PointInConvex(const vector<pll> &C, pll p, bool strict = true) {
-  int a = 1, b = SZ(C) - 1, r = !strict;
-  if (SZ(C) == 0) return false;
-  if (SZ(C) < 3) return r && btw(p, C[0], C.back());
+  int a = 1, b = sz(C) - 1, r = !strict;
+  if (sz(C) == 0) return false;
+  if (sz(C) < 3) return r && btw(p, C[0], C.back());
   if (ori(C[0], C[a], C[b]) > 0) swap(a, b);
   if (ori(C[0], C[a], p) >= r || ori(C[0], C[b], p) <= -r)
     return false;

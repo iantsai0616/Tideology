@@ -22,7 +22,7 @@ double _area(pdd pa, pdd pb, double r){
 }
 double areaPolyCircle(const vector<pdd> poly,const pdd &O,const double r){
   double S=0;
-  for(int i=0;i<SZ(poly);++i)
-    S+=_area(poly[i]-O,poly[(i+1)%SZ(poly)]-O,r)*ori(O,poly[i],poly[(i+1)%SZ(poly)]);
+  for(int i=0;i<sz(poly);++i)
+    S+=_area(poly[i]-O,poly[(i+1)%sz(poly)]-O,r)*ori(O,poly[i],poly[(i+1)%sz(poly)]);
   return fabs(S);
 }

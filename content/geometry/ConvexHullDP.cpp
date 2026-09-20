@@ -1,19 +1,19 @@
 /**
  * Description:
  */
-sort(iter(pts), [&](pll x, pll y) {
+sort(all(pts), [&](pll x, pll y) {
   return x.Y != y.Y ? x.Y < y.Y : x.X < y.X;
 });
-auto getvec = [&](pii x) { return pts[x.ss] - pts[x.ff]; };
+auto getvec = [&](pii x) { return pts[x.S] - pts[x.F]; };
 vector<pii> trans;
 for (int j = 0; j < n; j++)
   for (int k = 0; k < n; k++)
     if (j != k) trans.pb(pii(j, k));
-sort(iter(trans), [&](pii x, pii y) -> bool{
+sort(all(trans), [&](pii x, pii y) -> bool{
   int tmp = cmp(getvec(x), getvec(y), false);
   if (tmp != -1) return tmp;
   pll v = getvec(x);
-  return dot(v, pts[x.ff]) > dot(v, pts[y.ff]);
+  return dot(v, pts[x.F]) > dot(v, pts[y.F]);
 });
 // DP for convex hull vertices (no points on edges)
 auto solve = [&](int bottom) { // O(n^3)

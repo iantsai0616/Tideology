@@ -16,9 +16,9 @@ struct Delaunay { // 0-base
   vector<list<Edge>> head; // result udir. graph
   vector<pll> p;
   Delaunay(int _n, vector<pll> _p): n(_n), oidx(n), head(n), p(n) {
-    iota(iter(oidx), 0);
+    iota(all(oidx), 0);
     for (int i = 0; i < n; ++i) head[i].clear();
-    sort(iter(oidx), [&](int a, int b) 
+    sort(all(oidx), [&](int a, int b)
         { return _p[a] < _p[b]; });
     for (int i = 0; i < n; ++i) p[i] = _p[oidx[i]];
     divide(0, n - 1);

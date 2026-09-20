@@ -4,10 +4,10 @@
 using ld = long double;
 pair<pdd, ld> circumcenter(pdd a, pdd b, pdd c);
 pair<pdd, ld> MinimumEnclosingCircle(vector<pdd> &pts){
-	random_shuffle(iter(pts));
+	random_shuffle(all(pts));
 	pdd c = pts[0];
 	ld r = 0;
-	for(int i = 1; i < SZ(pts); i++){
+	for(int i = 1; i < sz(pts); i++){
 		if(abs(pts[i] - c) <= r) continue;
 		c = pts[i]; r = 0;
 		for(int j = 0; j < i; j++){

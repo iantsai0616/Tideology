@@ -2,7 +2,7 @@
  * Description:
  */
 TEMP void reorder_poly(vector<ptt>& pts){
-  rotate(pts.begin(), min_element(iter(pts), 
+  rotate(pts.begin(), min_element(all(pts),
     [&](ptt x, ptt y){ 
     return x.Y != y.Y ? x.Y < y.Y : x.X < y.X; }), 
     pts.end());

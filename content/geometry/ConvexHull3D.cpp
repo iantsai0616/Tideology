@@ -10,12 +10,12 @@ vector<Face> res;
 vector<Point> P;
 convex_hull_3D(const vector<Point> &_P): res(), P(_P) {
 // all points coplanar case will WA, O(n^2)
-  int n = SZ(P);
+  int n = sz(P);
   if (n <= 2) return; // be careful about edge case
   // ensure first 4 points are not coplanar
-  swap(P[1], *find_if(iter(P), [&](auto p) { return sgn(abs2(P[0] - p)) != 0; }));
-  swap(P[2], *find_if(iter(P), [&](auto p) { return sgn(abs2(cross3(p, P[0], P[1]))) != 0; }));
-  swap(P[3], *find_if(iter(P), [&](auto p) { return sgn(volume(P[0], P[1], P[2], p)) != 0; }));
+  swap(P[1], *find_if(all(P), [&](auto p) { return sgn(abs2(P[0] - p)) != 0; }));
+  swap(P[2], *find_if(all(P), [&](auto p) { return sgn(abs2(cross3(p, P[0], P[1]))) != 0; }));
+  swap(P[3], *find_if(all(P), [&](auto p) { return sgn(volume(P[0], P[1], P[2], p)) != 0; }));
   vector<vector<int>> flag(n, vector<int>(n));
   res.emplace_back(0, 1, 2); res.emplace_back(2, 1, 0);
   for (int i = 3; i < n; ++i) {
@@ -44,7 +44,7 @@ bool same(Face s, Face t) {
 }
 int polygon_face_num() {
   int ans = 0;
-  for (int i = 0; i < SZ(res); ++i)
+  for (int i = 0; i < sz(res); ++i)
     ans += none_of(res.begin(), res.begin() + i, [&](Face g) { return same(res[i], g); });
   return ans;
 }

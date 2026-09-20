@@ -2,15 +2,15 @@
  * Description:
  */
 int TangentDir(vector<pll> &C, pll dir) {
-  return cyc_tsearch(SZ(C), [&](int a, int b) {
+  return cyc_tsearch(sz(C), [&](int a, int b) {
     return cross(dir, C[a]) > cross(dir, C[b]); 
   });
 }
-#define cmpL(i) sign(cross(C[i] - a, b - a))
+#define cmpL(i) sgn(cross(C[i] - a, b - a))
 pii lineHull(pll a, pll b, vector<pll> &C) {
   int A = TangentDir(C, a - b);
   int B = TangentDir(C, b - a);
-  int n = SZ(C);
+  int n = sz(C);
   if (cmpL(A) < 0 || cmpL(B) > 0) 
     return pii(-1, -1); // no collision
   auto gao = [&](int l, int r) {

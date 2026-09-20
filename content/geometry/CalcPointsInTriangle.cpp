@@ -18,7 +18,7 @@ for (int i = 0; i < n; i++)
     }
   }
 auto calc_tri = [&](array<int, 3> arr) { // strictly inside
-  sort(iter(arr), [&](int x, int y){ return pts[x] < pts[y]; });
+  sort(all(arr), [&](int x, int y){ return pts[x] < pts[y]; });
   auto [x, y, z] = arr;
   int tmp = ori(pts[x], pts[y], pts[z]);
   if (tmp == 0) return 0;

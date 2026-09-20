@@ -13,23 +13,23 @@ bool isin(Line l0, Line l1, Line l2) {
 /* Having solution, check size > 2 */
 /* --^-- Line.X --^-- Line.Y --^-- */
 vector<Line> halfPlaneInter(vector<Line> arr) {
-  sort(iter(arr), [&](Line a, Line b) -> int {
+  sort(all(arr), [&](Line a, Line b) -> int {
     if (cmp(a.Y - a.X, b.Y - b.X, 0) != -1)
       return cmp(a.Y - a.X, b.Y - b.X, 0);
     return ori(a.X, a.Y, b.Y) < 0;
   });
   deque<Line> dq(1, arr[0]);
   auto pop_back = [&](int t, Line p) {
-    while (SZ(dq) >= t && !isin(p, dq[SZ(dq) - 2], dq.back()))
+    while (sz(dq) >= t && !isin(p, dq[sz(dq) - 2], dq.back()))
       dq.pop_back();
   };
   auto pop_front = [&](int t, Line p) {
-    while (SZ(dq) >= t && !isin(p, dq[0], dq[1]))
+    while (sz(dq) >= t && !isin(p, dq[0], dq[1]))
       dq.pop_front();
   };
   for (auto p : arr)
     if (cmp(dq.back().Y - dq.back().X, p.Y - p.X, 0) != -1)
       pop_back(2, p), pop_front(2, p), dq.pb(p);
   pop_back(3, dq[0]), pop_front(3, dq.back());
-  return vector<Line>(iter(dq));
+  return vector<Line>(all(dq));
 }
