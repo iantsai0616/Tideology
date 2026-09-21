@@ -28,5 +28,14 @@ int main(){
     assert(got==a);
     assert(r.n()<b.n() or (b.n()==1 and r==FPS{0}));
   }
+  for(int n : {61, 128, 513}){
+    FPS a(n), f(n);
+    a[0] = 1;
+    rep(i, 1, n) a[i] = rng() % ntt_mod, f[i] = rng() % ntt_mod;
+    FPS one = a.Mul(a.Inv(n)).cut(n);
+    assert(one[0] == 1);
+    rep(i, 1, n) assert(one[i] == 0);
+    assert(f.Exp(n).Ln(n) == f);
+  }
   cout<<"Tests passed!\n";
 }

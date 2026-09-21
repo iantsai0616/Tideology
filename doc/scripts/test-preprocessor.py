@@ -14,6 +14,15 @@ HASH_SCRIPT = ROOT / 'content/contest/hash.sh'
 
 
 class HashTest(unittest.TestCase):
+    def test_cpp_digits_and_conditional_macros_are_quiet(self):
+        source = '#ifdef DEBUG\n#define bug(x) x\n#else\n#define bug(x) void(0)\n#endif\nauto n = 1\'000;\n'
+        result = subprocess.run(['sh', str(HASH_SCRIPT)], input=source,
+                                text=True, capture_output=True, check=True)
+        self.assertEqual(result.stderr, '')
+        self.assertEqual(result.stdout.strip(), hashlib.md5(
+            b"#ifdefDEBUG#definebug(x)x#else#definebug(x)void(0)#endifauton=1'000;"
+        ).hexdigest()[:6])
+
     def test_hash_reads_stdin_without_main_cpp(self):
         with tempfile.TemporaryDirectory() as directory:
             result = subprocess.run(
