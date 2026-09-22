@@ -1,5 +1,7 @@
 /**
- * Description:
+ * Description: Exact integer-line helpers for half-plane intersection. Lines are stored
+ * as $ax + by + c \leq 0$, while intersections are returned as floating-point points.
+ * Time: O(1) per operation
  */
 // replace corresponding functions in vector HPI
 using i128 = __int128;

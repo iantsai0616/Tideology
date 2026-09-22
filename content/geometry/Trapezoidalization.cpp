@@ -1,5 +1,7 @@
 /**
- * Description:
+ * Description: Maintains line segments in vertical order during an x-coordinate sweep,
+ * processing insertion, crossing, and removal events and supporting lower-bound queries.
+ * Time: O((N + K) \log N), where K is the number of processed crossings
  */
 template<class T>
 struct SweepLine {

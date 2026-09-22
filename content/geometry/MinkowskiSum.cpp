@@ -1,5 +1,7 @@
 /**
- * Description:
+ * Description: Computes the Minkowski sum of two convex polygons by merging their edge
+ * directions after rotating both polygons to a canonical starting vertex.
+ * Time: O(N + M)
  */
 TEMP void reorder_poly(vector<ptt>& pts){
   rotate(pts.begin(), min_element(all(pts),

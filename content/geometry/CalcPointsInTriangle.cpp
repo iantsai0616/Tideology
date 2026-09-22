@@ -1,5 +1,7 @@
 /**
- * Description:
+ * Description: Precomputes point counts above every directed pair and answers the number
+ * of input points strictly inside a triangle in constant time.
+ * Time: O(N^3) preprocessing and O(1) per query
  */
 // all points are distinct
 // cnt[i][j] = # of point k s.t. strictly above ij, and i < k < j

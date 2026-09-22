@@ -1,5 +1,7 @@
 /**
- * Description:
+ * Description: Computes the area of intersection between a circle and a polygon whose
+ * vertices are given in boundary order.
+ * Time: O(N)
  */
 double _area(pdd pa, pdd pb, double r){	
   if(abs(pa)<abs(pb)) swap(pa, pb);

@@ -1,5 +1,7 @@
 /**
- * Description:
+ * Description: Finds the sides or vertex where an infinite directed line intersects a
+ * convex polygon. Returns {-1, -1} when there is no intersection.
+ * Time: O(\log N)
  */
 int TangentDir(vector<pll> &C, pll dir) {
   return cyc_tsearch(sz(C), [&](int a, int b) {

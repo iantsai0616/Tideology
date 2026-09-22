@@ -1,3 +1,10 @@
+/**
+ * Description: Formal power series modulo mod. Supports multiplication, inverse, shift,
+ * derivative, integral, logarithm, exponential, power, square root, multipoint evaluation,
+ * interpolation, division, compositional inverse, and composition.
+ * Requires: NTT, modular arithmetic helpers, fac, ivf, Jacobi, QuadraticResidue
+ * Time: O(N \log N) for multiplication and O(N \log^2 N) for most advanced operations
+ */
 // maybe need fac ivf
 // == PART HASH ==
 #define fi(s, n) for (int i = (int)(s); i < (int)(n); i++)

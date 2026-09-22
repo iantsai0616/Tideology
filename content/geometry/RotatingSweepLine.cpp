@@ -1,5 +1,7 @@
 /**
- * Description:
+ * Description: Rotates a sweep direction through all pairwise point directions while
+ * maintaining the order of points and grouping simultaneous collinear events.
+ * Time: O(N^2 \log N)
  */
 struct Event {
   pll d; int u, v;

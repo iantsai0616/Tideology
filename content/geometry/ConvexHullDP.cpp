@@ -1,5 +1,7 @@
 /**
- * Description:
+ * Description: Orders directed point pairs by angle and provides an $O(N^3)$ transition
+ * skeleton for dynamic programming over convex polygons.
+ * Time: O(N^3)
  */
 sort(all(pts), [&](pll x, pll y) {
   return x.Y != y.Y ? x.Y < y.Y : x.X < y.X;

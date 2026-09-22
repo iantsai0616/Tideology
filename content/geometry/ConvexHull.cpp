@@ -1,5 +1,7 @@
 /**
- * Description:
+ * Description: Computes the indices of the strict convex hull of a set of 2D points.
+ * Collinear points on hull edges are discarded.
+ * Time: O(N \log N)
  */
 vector<int> getConvexHull(vector<pdd>& pts){
 	vector<int> id(sz(pts));

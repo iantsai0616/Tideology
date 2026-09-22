@@ -1,5 +1,7 @@
 /**
- * Description:
+ * Description: Intersects directed half-planes and returns the boundary lines of the
+ * resulting convex region. Assumes the intersection is non-empty and checks strict inclusion.
+ * Time: O(N \log N)
  */
 pll area_pair(Line a, Line b) 
 { return pll(cross(a.Y - a.X, b.X - a.X), cross(a.Y - a.X, b.Y - a.X)); }

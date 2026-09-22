@@ -1,5 +1,7 @@
 /**
- * Description:
+ * Description: Computes the circumcenter, incenter, centroid, and orthocenter of a
+ * non-degenerate triangle.
+ * Time: O(1)
  */
 pdd circenter(pdd p0, pdd p1, pdd p2) { // SCOPE HASH
   p1 = p1 - p0, p2 = p2 - p0; // radius = abs(center)
