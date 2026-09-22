@@ -1,5 +1,6 @@
 /**
- * Source: Cached roots, DIF/DIT convolution
+ * Author: David Rydh, Per Austrin
+ * Date: 2003-03-16
  * Description: NTT/convolution mod 998244353; inputs in $[0, mod)$, size up to $2^{23}$.
  * Time: O(N log N)
  * Status: stress-tested and benchmarked

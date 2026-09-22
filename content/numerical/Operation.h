@@ -1,7 +1,10 @@
 /**
- * Source: Cached roots, DIF/DIT convolution
- * Description: Polynomial operations from std_abs codebook
+ * Author: David Rydh, Per Austrin
+ * Date: 2003-03-16
+ * Description: Polynomial operations from std\_abs codebook
  */
+#pragma once
+
 typedef vector<ll> Poly;
 Poly Mul(Poly a, Poly b, int bound = N) {
   int m = sz(a) + sz(b) - 1, n = 1;

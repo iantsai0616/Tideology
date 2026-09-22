@@ -1,2 +1,1 @@
-code=$(cpp -w -dD -P -fpreprocessed "$@") || exit 1
-printf '%s' "$code" | tr -d '[:space:]' | md5sum | cut -c-6
+cpp -w -dD -P -fpreprocessed | tr -d '[:space:]' | md5sum | cut -c-6
