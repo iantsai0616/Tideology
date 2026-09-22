@@ -1,5 +1,7 @@
 /**
- * Description:
+ * Description: Tests whether a point lies inside a convex polygon in logarithmic time.
+ * The strict flag controls whether boundary points are accepted.
+ * Time: O(\log N)
  */
 bool PointInConvex(const vector<pll> &C, pll p, bool strict = true) {
   int a = 1, b = sz(C) - 1, r = !strict;

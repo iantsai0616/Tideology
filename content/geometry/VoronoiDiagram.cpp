@@ -1,5 +1,7 @@
 /**
- * Description:
+ * Description: Builds the perpendicular-bisector half-planes of every Voronoi cell from
+ * a Delaunay triangulation. Run half-plane intersection to obtain the actual cells.
+ * Time: O(N^2) including Delaunay construction
  */
 // all coord. is even, you may want to call halfPlaneInter after then
 vector<vector<Line>> vec;

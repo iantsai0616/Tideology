@@ -1,5 +1,7 @@
 /**
- * Description:
+ * Description: Uses an exact determinant to test whether an integer point lies strictly
+ * inside the circumcircle of a counter-clockwise integer triangle.
+ * Time: O(1)
  */
 // return q's relation with circumcircle of tri(p[0],p[1],p[2])
 bool in_cc(const array<pll, 3> &p, pll q) {

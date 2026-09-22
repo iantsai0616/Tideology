@@ -1,5 +1,7 @@
 /**
- * Description:
+ * Description: Compares integer vectors by polar angle without trigonometry. Equal
+ * directions can be ordered by squared length or reported as equivalent.
+ * Time: O(1)
  */
 // -1: a // b (if same), 0/1: a < b
 int cmp(pll a, pll b, bool same = true){

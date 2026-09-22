@@ -1,5 +1,7 @@
 /**
- * Description:
+ * Description: Computes the area of the union of counter-clockwise integer polygons by
+ * splitting each edge into covered and uncovered parameter intervals.
+ * Time: O(E^2 \log E), where E is the total number of polygon edges
  */
 ld rat(pll a, pll b) {
   return sgn(b.X) ? (ld)a.X / b.X : (ld)a.Y / b.Y;

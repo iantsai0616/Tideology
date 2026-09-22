@@ -1,5 +1,7 @@
 /**
- * Description:
+ * Description: Incrementally constructs the triangular faces of a 3D convex hull and
+ * provides its coplanar face count, volume, and point-to-face distance.
+ * Time: O(N^2) construction
  */
 struct convex_hull_3D {
 struct Face {

@@ -1,5 +1,7 @@
 /**
- * Description:
+ * Description: Constructs an undirected Delaunay triangulation of 2D integer points by
+ * divide and conquer. No point may lie strictly inside a resulting circumcircle.
+ * Time: O(N^2)
  */
 /* Delaunay Triangulation:
    Given a sets of points on 2D plane, find a

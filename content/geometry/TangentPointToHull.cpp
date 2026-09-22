@@ -1,5 +1,7 @@
 /**
- * Description:
+ * Description: Finds one contact vertex for each tangent from a point strictly outside
+ * a convex polygon. The polygon must be stored in cyclic order.
+ * Time: O(\log N)
  */
 /* The point should be strictly out of hull
   return arbitrary point on the tangent line */

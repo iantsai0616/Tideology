@@ -1,5 +1,7 @@
 /**
- * Description:
+ * Description: Common 2D geometry primitives for pair-based points, including vector
+ * arithmetic, orientation, segment tests, line intersection, projection, and reflection.
+ * Time: O(1) per operation
  */
 using ld = double;
 using pdd = pair<ld, ld>;

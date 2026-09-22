@@ -1,5 +1,7 @@
 /**
- * Description:
+ * Description: Randomized incremental algorithm for the minimum enclosing circle of a
+ * non-empty point set. Requires a circumcenter routine for three boundary points.
+ * Time: O(N) expected
  */
 using ld = long double;
 pair<pdd, ld> circumcenter(pdd a, pdd b, pdd c);

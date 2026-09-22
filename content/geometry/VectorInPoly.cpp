@@ -1,5 +1,7 @@
 /**
- * Description:
+ * Description: Tests whether a directed vector from a polygon vertex lies inside the
+ * local angle formed by the previous and next vertices, with optional strict boundaries.
+ * Time: O(1)
  */
 // ori(a, b, c) >= 0, valid: "strict" angle from a-b to a-c
 bool btwangle(pll a, pll b, pll c, pll p, int strict) {

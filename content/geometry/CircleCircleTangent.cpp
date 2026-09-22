@@ -1,5 +1,7 @@
 /**
- * Description:
+ * Description: Returns the common tangent lines of two distinct circles. Use sign1 = 1
+ * for outer tangents and sign1 = -1 for inner tangents.
+ * Time: O(1)
  */
 vector<Line> CCtang( const Cir& c1 , const Cir& c2 , int sign1 ){
   vector<Line> ret;

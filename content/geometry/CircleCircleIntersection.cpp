@@ -1,5 +1,7 @@
 /**
- * Description:
+ * Description: Computes the intersection points of two non-concentric circles. Returns
+ * false when the circles are disjoint or one lies strictly inside the other.
+ * Time: O(1)
  */
 bool CCinter(Cir &a, Cir &b, pdd &p1, pdd &p2) {
   pdd o1 = a.O, o2 = b.O;

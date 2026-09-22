@@ -1,6 +1,8 @@
 /**
-* Description: bool pred(int a, int b); f(0) ~ f(n - 1) is a cyclic-shift U-function return idx s.t. pred(x, idx) is false forall x
-*/
+ * Description: Given a predicate over adjacent values of a cyclically shifted unimodal
+ * sequence, returns an index for which pred(x, index) is false for every x.
+ * Time: O(\log N)
+ */
 int cyc_tsearch(int n, auto pred) {
   if (n == 1) return 0;
   int l = 0, r = n; bool rv = pred(1, 0);

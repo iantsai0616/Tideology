@@ -1,5 +1,7 @@
 /**
- * Description:
+ * Description: Basic 3D point and vector operations, including dot and cross products,
+ * signed volume, spherical angles, projection onto a plane, and rotation around an axis.
+ * Time: O(1) per operation
  */
 struct Point {
   double x, y, z;
