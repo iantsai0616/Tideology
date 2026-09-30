@@ -67,5 +67,4 @@
 \contentsline {section}{\numberline {10.4}Debugging tricks}{26}{section.10.4}%
 \contentsline {section}{\numberline {10.5}Optimization tricks}{26}{section.10.5}%
 \contentsline {subsection}{\numberline {10.5.1}Bit hacks}{26}{subsection.10.5.1}%
-\contentsline {subsection}{\numberline {10.5.2}Pragmas}{26}{subsection.10.5.2}%
 \contentsfinish 
