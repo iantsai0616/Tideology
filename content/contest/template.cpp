@@ -2,7 +2,6 @@
 #include <bits/extc++.h>
 using namespace std;
 #define int long long
-#define ll long long
 #define all(x) x.begin(), x.end()
 #define pb push_back
 #define F first
@@ -13,6 +12,9 @@ using namespace std;
 #define rep(i, a, b) for(int i = a; i < (b); ++i)
 #define sz(x) (int)(x).size()
 #define vi vector<int>
+#define vll vector<ll>
+#define pll pair<ll, ll>
+typedef long long ll;
 #ifdef tsao
 template <typename T>
 ostream& operator << (ostream &o, const vector<T> &v){

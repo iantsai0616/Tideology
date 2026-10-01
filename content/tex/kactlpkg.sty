@@ -285,6 +285,56 @@
 }
 \kactlcontentdir{.}
 
+% Compact spacing for math-heavy chapters. Switch on right before a chapter
+% with \kactlcompactmathon and back off right after it with \kactlcompactmathoff,
+% so the other chapters keep the stock spacing. Only vertical whitespace is
+% touched (fonts, margins and the formulas themselves are left alone).
+\newif\ifkactl@compactmath
+\newskip\kactl@sv@above
+\newskip\kactl@sv@below
+\newskip\kactl@sv@aboveshort
+\newskip\kactl@sv@belowshort
+\newskip\kactl@sv@parskip
+\newdimen\kactl@sv@jot
+\let\kactl@sv@mathcr\relax
+\newcommand{\kactlcompactmathon}{%
+	\ifkactl@compactmath\else
+		\kactl@compactmathtrue
+		\kactl@sv@above\abovedisplayskip
+		\kactl@sv@below\belowdisplayskip
+		\kactl@sv@aboveshort\abovedisplayshortskip
+		\kactl@sv@belowshort\belowdisplayshortskip
+		\kactl@sv@parskip\parskip
+		\kactl@sv@jot\jot
+		\abovedisplayskip=2pt plus 1pt minus 2pt\relax
+		\belowdisplayskip=2pt plus 1pt minus 2pt\relax
+		\abovedisplayshortskip=0pt plus 1pt\relax
+		\belowdisplayshortskip=1pt plus 1pt minus 1pt\relax
+		\parskip=2pt plus 1pt\relax
+		\jot=1pt\relax
+		% amsmath turns a trailing "\\" before \end{align*} into an empty row;
+		% drop it (it only adds blank space, never any visible content).
+		\let\kactl@sv@mathcr\math@cr@
+		\def\math@cr@{%
+			\@ifnextchar\end
+				{\ifnum0=`{\fi\iffalse}\fi}%
+				{\kactl@sv@mathcr}%
+		}%
+	\fi
+}
+\newcommand{\kactlcompactmathoff}{%
+	\ifkactl@compactmath
+		\kactl@compactmathfalse
+		\abovedisplayskip\kactl@sv@above
+		\belowdisplayskip\kactl@sv@below
+		\abovedisplayshortskip\kactl@sv@aboveshort
+		\belowdisplayshortskip\kactl@sv@belowshort
+		\parskip\kactl@sv@parskip
+		\jot\kactl@sv@jot
+		\let\math@cr@\kactl@sv@mathcr
+	\fi
+}
+
 \newcommand{\kactlchapter}[1]{
 	\def\@kactldir{\@kactlbasedir/#1}
 	\input{"\@kactldir/chapter.tex"}
