@@ -9,10 +9,10 @@
 struct exSAM{
   static const int C = 27;
   vector<int>len, link, ord, cnt;
-  vector<array<int, C>>go;
+  vector<array<signed, C>>go; // not ll: memory
   int last;
   exSAM(int n){
-    len.reserve(4 * n + 5), link.reserve(4 * n + 5), cnt.reserve(4 * n + 5), go.reserve(4 * n + 5);
+    len.reserve(2 * n + 2), link.reserve(2 * n + 2), cnt.reserve(2 * n + 2), go.reserve(2 * n + 2);
     node(); link[0] = -1, last = 0;
   }
   int node(){

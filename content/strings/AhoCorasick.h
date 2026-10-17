@@ -21,7 +21,8 @@ struct AhoCorasick {
   enum {alpha = 26, first = 'A'}; // change this!
   struct Node {
     // (nmatches is optional)
-    int back, next[alpha], start = -1, end = -1, nmatches = 0;
+    int back, start = -1, end = -1, nmatches = 0;
+    signed next[alpha]; // not ll: memory
     Node(int v){ memset(next, v, sizeof(next)); }
   };
   vector<Node> N;
@@ -30,7 +31,7 @@ struct AhoCorasick {
     assert(!s.empty());
     int n = 0;
     for(char c : s){
-      int& m = N[n].next[c - first];
+      signed& m = N[n].next[c - first];
       if(m == -1){ n = m = sz(N); N.emplace_back(-1); }
       else n = m;
     }
@@ -48,7 +49,7 @@ struct AhoCorasick {
     for(q.push(0); !q.empty(); q.pop()){
       int n = q.front(), prev = N[n].back;
       rep(i, 0, alpha){
-        int &ed = N[n].next[i], y = N[prev].next[i];
+        signed &ed = N[n].next[i], y = N[prev].next[i];
         if(ed == -1) ed = y;
         else {
           N[ed].back = y;

@@ -24,14 +24,12 @@ template<int P, int G> void ntt(vl& a, bool inv){
   for(int len = 2; len <= n; len <<= 1){
     ll wl = pw<P>(G, (P-1)/len);
     if(inv) wl = pw<P>(wl, P-2);
-    for(int i = 0; i < n; i += len){
-      ll w = 1;
-      rep(j, 0, len/2){
-        ll u = a[i+j], v = a[i+j+len/2]*w%P;
-        a[i+j] = (u+v)%P;
-        a[i+j+len/2] = (u-v+P)%P;
-        w = w*wl%P;
-      }
+    vl W(len/2, 1);
+    rep(j, 1, len/2) W[j] = W[j-1]*wl%P;
+    for(int i = 0; i < n; i += len) rep(j, 0, len/2){
+      ll u = a[i+j], v = a[i+j+len/2]*W[j]%P;
+      a[i+j] = u+v < P ? u+v : u+v-P;
+      a[i+j+len/2] = u-v < 0 ? u-v+P : u-v;
     }
   }
   if(inv){

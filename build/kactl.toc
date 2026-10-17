@@ -14,7 +14,7 @@
 \contentsline {chapter}{\numberline {3}Data structures}{2}{chapter.3}%
 \contentsline {chapter}{\numberline {4}Numerical}{4}{chapter.4}%
 \contentsline {section}{\numberline {4.1}Polynomials and recurrences}{4}{section.4.1}%
-\contentsline {section}{\numberline {4.2}Optimization}{6}{section.4.2}%
+\contentsline {section}{\numberline {4.2}Optimization}{5}{section.4.2}%
 \contentsline {section}{\numberline {4.3}Matrices}{6}{section.4.3}%
 \contentsline {section}{\numberline {4.4}Fourier transforms}{7}{section.4.4}%
 \contentsline {chapter}{\numberline {5}Number theory}{8}{chapter.5}%
@@ -22,8 +22,8 @@
 \contentsline {subsection}{\numberline {5.1.1}Nice Primes}{8}{subsection.5.1.1}%
 \contentsline {section}{\numberline {5.2}Primality}{9}{section.5.2}%
 \contentsline {section}{\numberline {5.3}Divisibility}{9}{section.5.3}%
-\contentsline {subsection}{\numberline {5.3.1}Bézout's identity}{10}{subsection.5.3.1}%
-\contentsline {section}{\numberline {5.4}Fractions}{10}{section.5.4}%
+\contentsline {subsection}{\numberline {5.3.1}Bézout's identity}{9}{subsection.5.3.1}%
+\contentsline {section}{\numberline {5.4}Fractions}{9}{section.5.4}%
 \contentsline {section}{\numberline {5.5}Pythagorean Triples}{10}{section.5.5}%
 \contentsline {section}{\numberline {5.6}Primes}{10}{section.5.6}%
 \contentsline {section}{\numberline {5.7}Estimates}{10}{section.5.7}%
@@ -34,10 +34,10 @@
 \contentsline {subsection}{\numberline {6.1.2}Cycles}{10}{subsection.6.1.2}%
 \contentsline {subsection}{\numberline {6.1.3}Derangements}{10}{subsection.6.1.3}%
 \contentsline {subsection}{\numberline {6.1.4}Burnside's lemma}{10}{subsection.6.1.4}%
-\contentsline {section}{\numberline {6.2}Partitions and subsets}{11}{section.6.2}%
-\contentsline {subsection}{\numberline {6.2.1}Partition function}{11}{subsection.6.2.1}%
-\contentsline {subsection}{\numberline {6.2.2}Lucas' Theorem}{11}{subsection.6.2.2}%
-\contentsline {subsection}{\numberline {6.2.3}Binomials}{11}{subsection.6.2.3}%
+\contentsline {section}{\numberline {6.2}Partitions and subsets}{10}{section.6.2}%
+\contentsline {subsection}{\numberline {6.2.1}Partition function}{10}{subsection.6.2.1}%
+\contentsline {subsection}{\numberline {6.2.2}Lucas' Theorem}{10}{subsection.6.2.2}%
+\contentsline {subsection}{\numberline {6.2.3}Binomials}{10}{subsection.6.2.3}%
 \contentsline {section}{\numberline {6.3}General purpose numbers}{11}{section.6.3}%
 \contentsline {subsection}{\numberline {6.3.1}Bernoulli numbers}{11}{subsection.6.3.1}%
 \contentsline {subsection}{\numberline {6.3.2}Stirling numbers of the first kind}{11}{subsection.6.3.2}%
@@ -48,9 +48,9 @@
 \contentsline {subsection}{\numberline {6.3.7}Catalan numbers}{11}{subsection.6.3.7}%
 \contentsline {chapter}{\numberline {7}Graph}{11}{chapter.7}%
 \contentsline {section}{\numberline {7.1}Fundamentals}{11}{section.7.1}%
-\contentsline {section}{\numberline {7.2}Network flow}{12}{section.7.2}%
-\contentsline {section}{\numberline {7.3}Matching}{14}{section.7.3}%
-\contentsline {section}{\numberline {7.4}DFS algorithms}{15}{section.7.4}%
+\contentsline {section}{\numberline {7.2}Network flow}{11}{section.7.2}%
+\contentsline {section}{\numberline {7.3}Matching}{13}{section.7.3}%
+\contentsline {section}{\numberline {7.4}DFS algorithms}{14}{section.7.4}%
 \contentsline {section}{\numberline {7.5}Coloring}{16}{section.7.5}%
 \contentsline {section}{\numberline {7.6}Heuristics}{16}{section.7.6}%
 \contentsline {section}{\numberline {7.7}Trees}{17}{section.7.7}%
@@ -61,7 +61,7 @@
 \contentsline {section}{\numberline {8.1}Geometry}{18}{section.8.1}%
 \contentsline {chapter}{\numberline {9}Strings}{22}{chapter.9}%
 \contentsline {chapter}{\numberline {10}Various}{24}{chapter.10}%
-\contentsline {section}{\numberline {10.1}Intervals}{25}{section.10.1}%
+\contentsline {section}{\numberline {10.1}Intervals}{24}{section.10.1}%
 \contentsline {section}{\numberline {10.2}Misc. algorithms}{25}{section.10.2}%
 \contentsline {section}{\numberline {10.3}Dynamic programming}{25}{section.10.3}%
 \contentsline {section}{\numberline {10.4}Debugging tricks}{25}{section.10.4}%

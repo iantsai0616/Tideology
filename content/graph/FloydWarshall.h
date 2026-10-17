@@ -24,3 +24,5 @@ void floydWarshall(vector<vector<ll>>& m){
   rep(k, 0, n) if(m[k][k] < 0) rep(i, 0, n) rep(j, 0, n)
     if(m[i][k] != inf && m[k][j] != inf) m[i][j] = -inf;
 }
+// No negative edges, inf = 1e18: branch-free, vectorizes, ~2x faster:
+// rep(k, 0, n) rep(i, 0, n) rep(j, 0, n) m[i][j] = min(m[i][j], m[i][k] + m[k][j]);

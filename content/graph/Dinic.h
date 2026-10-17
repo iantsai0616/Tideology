@@ -4,7 +4,8 @@
  * License: CC0
  * Source: https://cp-algorithms.com/graph/dinic.html
  * Description: Flow algorithm with complexity $O(VE\log U)$ where $U = \max |\text{cap}|$.
- * $O(\min(E^{1/2}, V^{2/3})E)$ if $U = 1$; $O(\sqrt{V}E)$ for bipartite matching.
+ * $O(\min(E^{1/2}, V^{2/3})E)$ if $U = 1$; $O(\sqrt{V}E)$ for bipartite matching,
+ * but hopcroftKarp.h is 5x faster there (yosupo bipartitematching: 0.63s vs 3.05s).
  * Status: Tested on SPOJ FASTFLOW and SPOJ MATCHING, stress-tested
  */
 #pragma once
@@ -41,7 +42,7 @@ struct Dinic{
       int qi = 0, qe = lvl[s] = 1;
       while(qi < qe and !lvl[t]){
         int v = q[qi++];
-        for(Edge e : adj[v])
+        for(Edge &e : adj[v])
           if(!lvl[e.to] and e.c >> (30 - L))
             q[qe++] = e.to, lvl[e.to] = lvl[v] + 1;
       }

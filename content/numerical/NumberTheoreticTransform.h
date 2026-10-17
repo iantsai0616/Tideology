@@ -11,17 +11,20 @@
  * only works when sz(A) + sz(B) - 1 <= N
  */
 #pragma once
-// mul, add, sub, Pow for long long integers need to add
 const int N = (1<<20); // change if necessary, has to be 2^k
 const ll mod = 998244353, G = 3;
+ll mul(ll a, ll b){ return a * b % mod; }
+ll add(ll a, ll b){ return a + b < mod ? a + b : a + b - mod; }
+ll sub(ll a, ll b){ return a < b ? a - b + mod : a - b; }
+ll Pow(ll a, ll e){ ll r = 1; for(; e; e >>= 1, a = mul(a, a)) if(e & 1) r = mul(r, a); return r; }
 
 struct NTT {
   ll w[N];
-  NTT() {
-    ll dw = Pow(G, (mod - 1) / N);
-    w[0] = 1;
-    for (int i = 1; i < N; ++i)
-      w[i] = mul(w[i - 1], dw);
+  NTT() { // w[k + j] = (2k-th root)^j
+    for (int k = 1; k < N; k <<= 1) {
+      ll dw = Pow(G, (mod - 1) / (2 * k)); w[k] = 1;
+      for (int j = 1; j < k; ++j) w[k + j] = mul(w[k + j - 1], dw);
+    }
   } // 0 <= a[i] < P
   void operator()(vector<ll>& a, bool inv = false) {
     int n = sz(a);
@@ -30,9 +33,9 @@ struct NTT {
       if (j < x) swap(a[x], a[j]);
     }
     for (int L = 2; L <= n; L <<= 1) {
-      int dx = N / L, dl = L >> 1;
+      int dl = L >> 1;
       for (int i = 0; i < n; i += L) {
-        for (int j = i, x = 0; j < i + dl; ++j, x += dx) {
+        for (int j = i, x = dl; j < i + dl; ++j, ++x) {
           ll tmp = mul(a[j + dl], w[x]);
           a[j + dl] = sub(a[j], tmp);
           a[j] = add(a[j], tmp);

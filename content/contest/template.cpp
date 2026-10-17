@@ -1,14 +1,15 @@
-#include <bits/stdc++.h>
-#include <bits/extc++.h>
+/**
+ * Description: Contest template. Debug with ./run (defines tsao); check typing with ./hash template.
+ */
+#include <bits/stdc++.h> /// keep-include
+#include <bits/extc++.h> /// keep-include
 using namespace std;
 #define int long long
-#define all(x) x.begin(), x.end()
+#define all(x) (x).begin(), (x).end()
 #define pb push_back
 #define F first
 #define S second
 #define pii pair<int, int>
-#define chmax(x, y) x = x > y ? x : y
-#define chmin(x, y) x = x < y ? x : y
 #define rep(i, a, b) for(int i = a; i < (b); ++i)
 #define sz(x) (int)(x).size()
 #define vi vector<int>
@@ -16,6 +17,10 @@ using namespace std;
 #define pll pair<ll, ll>
 typedef long long ll;
 #ifdef tsao
+template <typename A, typename B>
+ostream& operator << (ostream &o, const pair<A, B> &p){
+  return o << "(" << p.F << ", " << p.S << ")";
+}
 template <typename T>
 ostream& operator << (ostream &o, const vector<T> &v){
   o << "{"; int f = 0;
@@ -41,7 +46,7 @@ void solve(){
 }
 signed main(){
   ios::sync_with_stdio(0);
-  cin.tie(0);cout.tie(0);
+  cin.tie(0); cout.tie(0);
   int t = 1;
   while(t--) solve();
 }
