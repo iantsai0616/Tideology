@@ -12,7 +12,7 @@
 #pragma once
 
 struct Eertree {
-  vector<array<int32_t, 26>> nx; vi len, link, par, cnt;
+  vector<array<int32_t, 26>> nx; vector<int32_t> len, link, par, cnt;
   string s; int last = 1;
   Eertree(){ node(-1, 0, -1), node(0, 0, -1); }
   int node(int l, int k, int p){

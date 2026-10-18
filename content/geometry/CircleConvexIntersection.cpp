@@ -3,13 +3,14 @@
  * vertices are given in boundary order.
  * Time: O(N)
  */
+const double PI = acos(-1);
 double _area(pdd pa, pdd pb, double r){	
   if(abs(pa)<abs(pb)) swap(pa, pb);
   if(abs(pb)<eps) return 0;
   double S, h, theta;
   double a=abs(pb),b=abs(pa),c=abs(pb-pa);
-  double cosB = dot(pb,pb-pa) / a / c, B = acos(cosB);
-  double cosC = dot(pa,pb) / a / b, C = acos(cosC);
+  double cosB = dot(pb,pb-pa) / a / c, B = acos(clamp(cosB, -1.0, 1.0));
+  double cosC = dot(pa,pb) / a / b, C = acos(clamp(cosC, -1.0, 1.0));
   if(a > r){
     S = (C/2)*r*r;
     h = a*b*sin(C)/c;

@@ -14,7 +14,7 @@ void rotatingSweepLine(const vector<pll> &p) {
   vector<Event> e; e.reserve(n * (n - 1));
   for (int i = 0; i < n; i++)
     for (int j = 0; j < n; j++) // pos[i] < pos[j] when the event occurs
-      if (i != j) e.pb(p[j] - p[i], i, j);
+      if (i != j) e.pb({p[j] - p[i], i, j});
   sort(all(e));
   vector<int> ord(n), pos(n);
   iota(all(ord), 0);

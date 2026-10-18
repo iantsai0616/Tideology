@@ -20,4 +20,4 @@ pdd incenter(pdd p1, pdd p2, pdd p3) { // radius = area / s * 2
 pdd masscenter(pdd p1, pdd p2, pdd p3) 
 { return (p1 + p2 + p3) / 3; }
 pdd orthcenter(pdd p1, pdd p2, pdd p3) 
-{ return masscenter(p1, p2, p3) * 3 - circenter(p1, p2, p3) * 2; }
+{ return masscenter(p1, p2, p3) * 3.0 - circenter(p1, p2, p3) * 2.0; }

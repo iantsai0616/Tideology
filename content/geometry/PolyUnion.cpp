@@ -19,11 +19,11 @@ ld polyUnion(vector<vector<pll>> &poly) {
           int sc = ori(A, B, C), sd = ori(A, B, D);
           if (sc != sd && min(sc, sd) < 0) {
             ld sa = cross(D - C, A - C), sb = cross(D - C, B - C);
-            segs.pb(sa / (sa - sb), sgn(sc - sd));
+            segs.pb({sa / (sa - sb), sgn(sc - sd)});
           }
           if (!sc && !sd && &q < &p && sgn(dot(B - A, D - C)) > 0) {
-            segs.pb(rat(C - A, B - A), 1);
-            segs.pb(rat(D - A, B - A), -1);
+            segs.pb({rat(C - A, B - A), 1});
+            segs.pb({rat(D - A, B - A), -1});
           }
         }
       }

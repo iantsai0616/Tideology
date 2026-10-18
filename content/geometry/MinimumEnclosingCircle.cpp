@@ -3,10 +3,12 @@
  * non-empty point set. Requires a circumcenter routine for three boundary points.
  * Time: O(N) expected
  */
-using ld = long double;
-pair<pdd, ld> circumcenter(pdd a, pdd b, pdd c);
+pair<pdd, ld> circumcenter(pdd A, pdd B, pdd C){
+	pdd b = C - A, c = B - A, o = A + perp(b * abs2(c) - c * abs2(b)) / cross(b, c) / 2;
+	return {o, abs(o - A)};
+}
 pair<pdd, ld> MinimumEnclosingCircle(vector<pdd> &pts){
-	random_shuffle(all(pts));
+	shuffle(all(pts), mt19937(1));
 	pdd c = pts[0];
 	ld r = 0;
 	for(int i = 1; i < sz(pts); i++){

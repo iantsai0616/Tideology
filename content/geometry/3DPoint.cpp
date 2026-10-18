@@ -20,6 +20,7 @@ Point cross(Point p1, Point p2)
 { return Point(p1.y * p2.z - p1.z * p2.y, p1.z * p2.x - p1.x * p2.z, p1.x * p2.y - p1.y * p2.x); }
 double dot(Point p1, Point p2)
 { return p1.x * p2.x + p1.y * p2.y + p1.z * p2.z; }
+double abs2(Point a){ return dot(a, a); }
 double abs(Point a)
 { return sqrt(dot(a, a)); }
 Point cross3(Point a, Point b, Point c)

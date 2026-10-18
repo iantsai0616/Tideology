@@ -10,20 +10,18 @@
 
 typedef unsigned long long ull;
 int lcs(const string& a, const string& b){
-  int W = sz(b) / 64 + 1, res = 0;
+  int W = sz(b) / 64 + 1, res = sz(b);
   vector<vector<ull>> M(256, vector<ull>(W));
   rep(j, 0, sz(b)) M[(unsigned char)b[j]][j >> 6] |= 1ULL << (j & 63);
-  vector<ull> row(W);
+  vector<ull> V(W, ~0ULL); // V = (V + (V & M[c])) | (V & ~M[c])
   for(unsigned char c : a){
-    ull carry = 1, borrow = 0;
-    rep(w, 0, W){ // row = x & ~(x - (row << 1 | 1)), x = row | M[c]
-      ull x = row[w] | M[c][w], y = row[w] << 1 | carry;
-      carry = row[w] >> 63;
-      ull d = x - y - borrow;
-      borrow = x < y || x - y < borrow;
-      row[w] = x & ~d;
+    unsigned __int128 carry = 0;
+    rep(w, 0, W){
+      ull u = V[w] & M[c][w];
+      carry += (unsigned __int128)V[w] + u;
+      V[w] = (ull)carry | (V[w] - u), carry >>= 64;
     }
   }
-  for(ull w : row) res += __builtin_popcountll(w);
+  rep(j, 0, sz(b)) res -= V[j >> 6] >> (j & 63) & 1;
   return res;
 }

@@ -19,14 +19,18 @@ struct BellmanFord{
     vector<ll>d(n, INF);
     vi par(n, -1);
     d[s] = 0;
-    rep(i, 0, n){
+    for(int i = 0, ch = 1; i < n && ch; i++){
+      ch = 0;
       for(auto [u, v, w] : ed) if(d[u] != INF){
         ll nd = max(-INF, d[u] + w);
-        if(nd < d[v]) d[v] = i == n - 1 ? -INF : nd, par[v] = u;
+        if(nd < d[v]) d[v] = i == n - 1 ? -INF : nd, par[v] = u, ch = 1;
       }
     }
-    rep(i, 0, n) for(auto [u, v, w] : ed)
-      if(d[u] == -INF) d[v] = -INF;
+    for(int i = 0, ch = 1; i < n && ch; i++){
+      ch = 0;
+      for(auto [u, v, w] : ed)
+        if(d[u] == -INF && d[v] != -INF) d[v] = -INF, ch = 1;
+    }
     return {d, par};
   }
 };

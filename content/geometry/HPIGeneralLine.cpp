@@ -5,6 +5,7 @@
  */
 // replace corresponding functions in vector HPI
 using i128 = __int128;
+int sgn(i128 v){ return (v > 0) - (v < 0); }
 struct LN {
   ll a, b, c; // ax + by + c <= 0
   pll dir() const { return pll(a, b); }

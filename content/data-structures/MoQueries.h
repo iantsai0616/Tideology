@@ -7,7 +7,8 @@
 #pragma once
 
 template<class Add, class Del, class Calc>
-auto mo(vector<pii> Q, Add add, Del del, Calc calc, int blk=350){
+auto mo(vector<pii> Q, Add add, Del del, Calc calc, int blk=0){
+  if(!blk){ int R = 1; for(auto [l, r] : Q) R = max(R, r); blk = max<int>(1, R / sqrt(sz(Q) + 1)); }
   using T=decltype(calc());
   int L=0, R=0; vi ord(sz(Q)); vector<T> ans(sz(Q));
   iota(all(ord), 0);

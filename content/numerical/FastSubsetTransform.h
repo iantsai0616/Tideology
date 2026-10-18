@@ -24,7 +24,7 @@ void FST(vi& a, bool inv, int mod = 0){
         // pii(u + v, u - v);                   // XOR /// include-line
     }
   }
-  // if(inv) for(int& x : a) x /= sz(a); // XOR only /// include-line
+  // if(inv) for(int& x : a) x /= sz(a); // XOR only; mod: * modpow(sz(a), mod-2) /// include-line
 }
 vi conv(vi a, vi b, int mod = 0){
   FST(a, 0, mod); FST(b, 0, mod);

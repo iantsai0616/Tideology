@@ -33,10 +33,10 @@ ull unrootedHash(vector<vi>& g){
   for(int c : centroids(g)) h = min(h, treeHash(g, c));
   return h;
 }
-map<vi, int> id;
+map<vi, int> ahuId;
 int ahu(vector<vi>& g, vi& res, int u, int p = -1){ // res[v] = id of subtree v
   vi c;
   for(int v : g[u]) if(v != p) c.push_back(ahu(g, res, v, u));
   sort(all(c));
-  return res[u] = id.emplace(c, sz(id)).first->second;
+  return res[u] = ahuId.emplace(c, sz(ahuId)).first->second;
 }

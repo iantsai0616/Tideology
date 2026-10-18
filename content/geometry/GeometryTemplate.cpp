@@ -39,6 +39,9 @@ TEMP bool collinearity(ptt a, ptt b, ptt c)
 TEMP bool btw(ptt p, ptt a, ptt b)
 { return collinearity(p, a, b) && sgn(dot(a - p, b - p)) <= 0; }
 
+TEMP bool seg_strict_intersect(ptt p1, ptt p2, ptt p3, ptt p4){
+  return ori(p1, p2, p3) * ori(p1, p2, p4) < 0 && ori(p3, p4, p1) * ori(p3, p4, p2) < 0;
+}
 TEMP bool seg_intersect(ptt p1, ptt p2, ptt p3, ptt p4){
   if(btw(p1, p3, p4) || btw(p2, p3, p4) || btw(p3, p1, p2) || btw(p4, p1, p2))
     return true;

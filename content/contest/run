@@ -1,1 +1,12 @@
-g++ -std=gnu++20 -Dtsao -Wall -Wextra -Wshadow -fsanitize=address,undefined -D_GLIBCXX_DEBUG -g -O2 -pipe $1.cpp -o $1 && ./$1
+F="-std=gnu++20 -Dtsao -Wall -Wextra -Wshadow -g -O2 -pipe"
+F="$F -fsanitize=address,undefined"
+F="$F -fno-sanitize-recover=all -D_GLIBCXX_ASSERTIONS"
+if [ ! -f bits/stdc++.h.gch ]; then # precompile, once
+  mkdir -p bits
+  echo '#include_next <bits/stdc++.h>' > bits/stdc++.h
+  echo '#include <bits/stdc++.h>' > pch.h
+  echo '#include <bits/extc++.h>' >> pch.h
+  g++ $F -x c++-header pch.h -o bits/stdc++.h.gch
+fi
+export ASAN_OPTIONS=detect_leaks=0:handle_abort=1
+g++ $F -I. $1.cpp -o $1 && ./$1
