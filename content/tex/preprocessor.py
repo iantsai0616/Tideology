@@ -229,12 +229,12 @@ def print_header(data, outstream):
     header_length = len("".join(lines[:ind]))
     def adjust(name):
         return name if name.startswith('.') else name.split('.')[0]
-    output = r"\enspace{}".join(map(adjust, lines[:ind]))
-    font_size = 10
-    if header_length > 150:
-        font_size = 8
-    output = r"\hspace{3mm}\textbf{" + output + "}"
-    output = "\\fontsize{%d}{%d}" % (font_size, font_size) + output
+    names = list(map(adjust, lines[:ind]))
+    text_length = len(" ".join(names))
+    font_size = 10 if text_length <= 70 else 8 if text_length <= 90 else 7
+    # break lines only between file names, never inside one
+    output = r"\ ".join(r"\mbox{%s}" % name for name in names)
+    output = "\\fontsize{%d}{%d}\\selectfont\\textbf{%s}" % (font_size, font_size + 1, output)
     print(output, file=outstream)
     with open('build/header.tmp', 'w') as f:
         for line in lines[ind:]:

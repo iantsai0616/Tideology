@@ -94,7 +94,6 @@ Simplex.h
 Determinant.h
 IntDeterminant.h
 SolveLinear.h
-SolveLinear2.h
 SolveLinearBinary.h
 MatrixInverse.h
 FastFourierTransform.h
